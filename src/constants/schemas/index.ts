@@ -1,4 +1,4 @@
-import moment from "moment";
+import { isAfter, isBefore, isSameDay, parseISO, startOfDay } from "date-fns";
 import { z } from "zod";
 
 import masks from "@/utils/masks";
@@ -149,11 +149,14 @@ export const dateNotFuture = z
   })
   .refine(
     (dateString) => {
-      const date = moment(dateString, "YYYY-MM-DD");
-      return (
-        date.isBefore(moment().startOf("day")) ||
-        date.isSame(moment().startOf("day"))
-      ); // Verifica se a data não é futura
+      try {
+        const date = parseISO(dateString);
+        const today = startOfDay(new Date());
+        const dateToCheck = startOfDay(date);
+        return isBefore(dateToCheck, today) || isSameDay(dateToCheck, today);
+      } catch {
+        return false;
+      }
     },
     {
       message: "A data não pode ser uma data futura",
@@ -170,8 +173,14 @@ export const dateOnlyFuture = z
   })
   .refine(
     (dateString) => {
-      const date = moment(dateString, "YYYY-MM-DD");
-      return date.isAfter(moment().startOf("day")); // Verifica se a data é futura
+      try {
+        const date = parseISO(dateString);
+        const today = startOfDay(new Date());
+        const dateToCheck = startOfDay(date);
+        return isAfter(dateToCheck, today);
+      } catch {
+        return false;
+      }
     },
     {
       message: "A data deve ser uma data futura",

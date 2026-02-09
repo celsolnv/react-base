@@ -1,4 +1,4 @@
-import moment from "moment";
+import { addDays, format, subDays } from "date-fns";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -575,21 +575,21 @@ describe("schemas", () => {
   describe("dateNotFuture", () => {
     it("should validate past date", () => {
       const schema = dateNotFuture;
-      const pastDate = moment().subtract(1, "days").format("YYYY-MM-DD");
+      const pastDate = format(subDays(new Date(), 1), "yyyy-MM-dd");
       const result = schema.safeParse(pastDate);
       expect(result.success).toBe(true);
     });
 
     it("should validate today's date", () => {
       const schema = dateNotFuture;
-      const today = moment().format("YYYY-MM-DD");
+      const today = format(new Date(), "yyyy-MM-dd");
       const result = schema.safeParse(today);
       expect(result.success).toBe(true);
     });
 
     it("should reject future date", () => {
       const schema = dateNotFuture;
-      const futureDate = moment().add(1, "days").format("YYYY-MM-DD");
+      const futureDate = format(addDays(new Date(), 1), "yyyy-MM-dd");
       const result = schema.safeParse(futureDate);
       expect(result.success).toBe(false);
       if (!result.success) {
@@ -621,14 +621,14 @@ describe("schemas", () => {
   describe("dateOnlyFuture", () => {
     it("should validate future date", () => {
       const schema = dateOnlyFuture;
-      const futureDate = moment().add(1, "days").format("YYYY-MM-DD");
+      const futureDate = format(addDays(new Date(), 1), "yyyy-MM-dd");
       const result = schema.safeParse(futureDate);
       expect(result.success).toBe(true);
     });
 
     it("should reject today's date", () => {
       const schema = dateOnlyFuture;
-      const today = moment().format("YYYY-MM-DD");
+      const today = format(new Date(), "yyyy-MM-dd");
       const result = schema.safeParse(today);
       expect(result.success).toBe(false);
       if (!result.success) {
@@ -640,7 +640,7 @@ describe("schemas", () => {
 
     it("should reject past date", () => {
       const schema = dateOnlyFuture;
-      const pastDate = moment().subtract(1, "days").format("YYYY-MM-DD");
+      const pastDate = format(subDays(new Date(), 1), "yyyy-MM-dd");
       const result = schema.safeParse(pastDate);
       expect(result.success).toBe(false);
     });
@@ -667,21 +667,21 @@ describe("schemas", () => {
   describe("dateFutureAllowed", () => {
     it("should validate any valid date string", () => {
       const schema = dateFutureAllowed;
-      const today = moment().format("YYYY-MM-DD");
+      const today = format(new Date(), "yyyy-MM-dd");
       const result = schema.safeParse(today);
       expect(result.success).toBe(true);
     });
 
     it("should validate past date", () => {
       const schema = dateFutureAllowed;
-      const pastDate = moment().subtract(1, "days").format("YYYY-MM-DD");
+      const pastDate = format(subDays(new Date(), 1), "yyyy-MM-dd");
       const result = schema.safeParse(pastDate);
       expect(result.success).toBe(true);
     });
 
     it("should validate future date", () => {
       const schema = dateFutureAllowed;
-      const futureDate = moment().add(1, "days").format("YYYY-MM-DD");
+      const futureDate = format(addDays(new Date(), 1), "yyyy-MM-dd");
       const result = schema.safeParse(futureDate);
       expect(result.success).toBe(true);
     });

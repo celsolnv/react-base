@@ -1,17 +1,5 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-
-// Mock moment ANTES de importar as funções
-vi.mock("moment/min/moment-with-locales", async () => {
-  const momentModule = await import("moment");
-  const moment = momentModule.default;
-  moment.locale("pt-br");
-  return {
-    default: moment,
-  };
-});
-
-// Import moment para usar nos testes
-import moment from "moment";
+import { parseISO } from "date-fns";
+import { describe, expect, it } from "vitest";
 
 import {
   getLastMonthsLabels,
@@ -22,14 +10,6 @@ import {
 } from "./index";
 
 describe("dates utils", () => {
-  beforeEach(() => {
-    moment.locale("pt-br");
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   describe("getLastMonthsLabels", () => {
     it("should return empty array when amountBefore is 0", () => {
       const result = getLastMonthsLabels(0);
@@ -37,22 +17,22 @@ describe("dates utils", () => {
     });
 
     it("should return last month label when amountBefore is 1", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastMonthsLabels(1, fixedDate);
       expect(result).toHaveLength(1);
       expect(result[0]).toBe("Fev");
     });
 
     it("should return multiple last months labels", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastMonthsLabels(3, fixedDate);
       expect(result).toHaveLength(3);
       expect(result).toEqual(["Dez", "Jan", "Fev"]);
     });
 
     it("should include current month when addCurrentMonth is true", () => {
-      const fixedDate = moment("2024-03-15");
-      const result = getLastMonthsLabels(2, fixedDate.clone(), true);
+      const fixedDate = parseISO("2024-03-15");
+      const result = getLastMonthsLabels(2, fixedDate, true);
       expect(result).toHaveLength(2);
       // A função adiciona o mês atual, depois subtrai meses e faz reverse
       // Após reverse: ["Fev", "Mar"] (do mais antigo para o mais recente)
@@ -61,15 +41,15 @@ describe("dates utils", () => {
     });
 
     it("should not include current month when addCurrentMonth is false", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastMonthsLabels(2, fixedDate, false);
       expect(result).toHaveLength(2);
       expect(result).not.toContain("Mar");
     });
 
     it("should adjust amountBefore when addCurrentMonth is true", () => {
-      const fixedDate = moment("2024-03-15");
-      const result = getLastMonthsLabels(3, fixedDate.clone(), true);
+      const fixedDate = parseISO("2024-03-15");
+      const result = getLastMonthsLabels(3, fixedDate, true);
       expect(result).toHaveLength(3);
       // A função adiciona o mês atual, depois subtrai 2 meses e faz reverse
       // Após reverse: ["Jan", "Fev", "Mar"] (do mais antigo para o mais recente)
@@ -85,14 +65,14 @@ describe("dates utils", () => {
     });
 
     it("should handle year boundary correctly", () => {
-      const fixedDate = moment("2024-01-15");
+      const fixedDate = parseISO("2024-01-15");
       const result = getLastMonthsLabels(2, fixedDate);
       expect(result).toHaveLength(2);
       expect(result).toEqual(["Nov", "Dez"]);
     });
 
     it("should return labels in reverse order", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastMonthsLabels(3, fixedDate);
       // Should be in chronological order (oldest to newest)
       expect(result[0]).toBe("Dez");
@@ -100,7 +80,7 @@ describe("dates utils", () => {
     });
 
     it("should capitalize month labels", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastMonthsLabels(1, fixedDate);
       expect(result[0][0]).toBe(result[0][0].toUpperCase());
     });
@@ -113,21 +93,21 @@ describe("dates utils", () => {
     });
 
     it("should return next month label when amountNext is 1", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getNextMonthsLabels(1, false, fixedDate);
       expect(result).toHaveLength(1);
       expect(result[0]).toBe("Abr");
     });
 
     it("should return multiple next months labels", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getNextMonthsLabels(3, false, fixedDate);
       expect(result).toHaveLength(3);
       expect(result).toEqual(["Abr", "Mai", "Jun"]);
     });
 
     it("should include current month when addCurrentMonth is true", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getNextMonthsLabels(2, true, fixedDate);
       expect(result).toHaveLength(2);
       expect(result[0]).toBe("Mar");
@@ -135,14 +115,14 @@ describe("dates utils", () => {
     });
 
     it("should not include current month when addCurrentMonth is false", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getNextMonthsLabels(2, false, fixedDate);
       expect(result).toHaveLength(2);
       expect(result).not.toContain("Mar");
     });
 
     it("should adjust amountNext when addCurrentMonth is true", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getNextMonthsLabels(3, true, fixedDate);
       expect(result).toHaveLength(3);
       // Should have current month + 2 next months
@@ -156,14 +136,14 @@ describe("dates utils", () => {
     });
 
     it("should handle year boundary correctly", () => {
-      const fixedDate = moment("2024-12-15");
+      const fixedDate = parseISO("2024-12-15");
       const result = getNextMonthsLabels(2, false, fixedDate);
       expect(result).toHaveLength(2);
       expect(result).toEqual(["Jan", "Fev"]);
     });
 
     it("should capitalize month labels", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getNextMonthsLabels(1, false, fixedDate);
       expect(result[0][0]).toBe(result[0][0].toUpperCase());
     });
@@ -176,14 +156,14 @@ describe("dates utils", () => {
     });
 
     it("should return last week label in short format", () => {
-      const fixedDate = moment("2024-03-15"); // Friday
+      const fixedDate = parseISO("2024-03-15"); // Friday
       const result = getLastWeeksLabels(1, "short", fixedDate);
       expect(result).toHaveLength(1);
       expect(result[0]).toMatch(/\d{2}\/\d{2} - \d{2}\/\d{2}/);
     });
 
     it("should return last week label in long format", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastWeeksLabels(1, "long", fixedDate);
       expect(result).toHaveLength(1);
       // O formato inclui acentos nos meses em português, então usamos uma regex mais flexível
@@ -193,7 +173,7 @@ describe("dates utils", () => {
     });
 
     it("should return multiple last weeks labels in short format", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastWeeksLabels(2, "short", fixedDate);
       expect(result).toHaveLength(2);
       expect(result[0]).toMatch(/\d{2}\/\d{2} - \d{2}\/\d{2}/);
@@ -201,7 +181,7 @@ describe("dates utils", () => {
     });
 
     it("should return multiple last weeks labels in long format", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastWeeksLabels(2, "long", fixedDate);
       expect(result).toHaveLength(2);
       // O formato inclui acentos nos meses em português
@@ -212,7 +192,7 @@ describe("dates utils", () => {
     });
 
     it("should use short format as default", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastWeeksLabels(1, undefined, fixedDate);
       expect(result[0]).toMatch(/\d{2}\/\d{2} - \d{2}\/\d{2}/);
     });
@@ -224,27 +204,27 @@ describe("dates utils", () => {
     });
 
     it("should return labels in reverse order", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastWeeksLabels(3, "short", fixedDate);
       // Should be in chronological order (oldest to newest)
       expect(result.length).toBe(3);
     });
 
     it("should capitalize week labels", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastWeeksLabels(1, "long", fixedDate);
       expect(result[0][0]).toBe(result[0][0].toUpperCase());
     });
 
     it("should handle week boundaries correctly", () => {
-      const fixedDate = moment("2024-03-03"); // Sunday
+      const fixedDate = parseISO("2024-03-03"); // Sunday
       const result = getLastWeeksLabels(1, "short", fixedDate);
       expect(result).toHaveLength(1);
       expect(result[0]).toMatch(/\d{2}\/\d{2} - \d{2}\/\d{2}/);
     });
 
     it("should handle month boundaries in week labels", () => {
-      const fixedDate = moment("2024-03-01"); // First day of month
+      const fixedDate = parseISO("2024-03-01"); // First day of month
       const result = getLastWeeksLabels(1, "short", fixedDate);
       expect(result).toHaveLength(1);
       expect(result[0]).toMatch(/\d{2}\/\d{2} - \d{2}\/\d{2}/);
@@ -258,14 +238,14 @@ describe("dates utils", () => {
     });
 
     it("should return last year label when amountBefore is 1", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastYearsLabels(1, fixedDate);
       expect(result).toHaveLength(1);
       expect(result[0]).toBe("2023");
     });
 
     it("should return multiple last years labels", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastYearsLabels(3, fixedDate);
       expect(result).toHaveLength(3);
       expect(result).toEqual(["2021", "2022", "2023"]);
@@ -279,7 +259,7 @@ describe("dates utils", () => {
     });
 
     it("should return labels in reverse order", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastYearsLabels(3, fixedDate);
       // Should be in chronological order (oldest to newest)
       expect(result[0]).toBe("2021");
@@ -287,14 +267,14 @@ describe("dates utils", () => {
     });
 
     it("should return year as string in YYYY format", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastYearsLabels(1, fixedDate);
       expect(result[0]).toMatch(/^\d{4}$/);
       expect(result[0].length).toBe(4);
     });
 
     it("should handle multiple years correctly", () => {
-      const fixedDate = moment("2024-03-15");
+      const fixedDate = parseISO("2024-03-15");
       const result = getLastYearsLabels(5, fixedDate);
       expect(result).toHaveLength(5);
       expect(result).toEqual(["2019", "2020", "2021", "2022", "2023"]);
@@ -342,7 +322,7 @@ describe("dates utils", () => {
 
     it("should handle month 0 (should wrap to December of previous year)", () => {
       const result = getMonthByNumber(0);
-      // moment.month(0-1) = moment.month(-1) which is December of previous year
+      // setMonth(0-1) = setMonth(-1) which is December of previous year
       // But format("MMMM") will still return "dezembro"
       expect(typeof result).toBe("string");
       expect(result.length).toBeGreaterThan(0);
@@ -350,21 +330,21 @@ describe("dates utils", () => {
 
     it("should handle month 13 (should wrap to January of next year)", () => {
       const result = getMonthByNumber(13);
-      // moment.month(13-1) = moment.month(12) which is January of next year
+      // setMonth(13-1) = setMonth(12) which is January of next year
       expect(typeof result).toBe("string");
       expect(result.length).toBeGreaterThan(0);
     });
 
     it("should handle negative month numbers", () => {
       const result = getMonthByNumber(-1);
-      // moment.month(-1-1) = moment.month(-2) which wraps around
+      // setMonth(-1-1) = setMonth(-2) which wraps around
       expect(typeof result).toBe("string");
       expect(result.length).toBeGreaterThan(0);
     });
 
     it("should handle large month numbers", () => {
       const result = getMonthByNumber(25);
-      // moment.month(25-1) = moment.month(24) which wraps around
+      // setMonth(25-1) = setMonth(24) which wraps around
       expect(typeof result).toBe("string");
       expect(result.length).toBeGreaterThan(0);
     });

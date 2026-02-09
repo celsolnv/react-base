@@ -25,7 +25,6 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "moment/min/moment-with-locales": "moment",
     },
   },
   test: {
