@@ -12,7 +12,6 @@ import {
   ShieldCheck,
   // UserCircle,
   UserCog,
-  Users,
   // Users,
   // Wallet,
   // Wrench,
@@ -31,20 +30,20 @@ export interface NavSection {
 }
 
 export const navigationData: NavSection[] = [
-  {
-    title: "Principal",
-    items: [
-      // { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-      // { title: "Veículos", href: "/veiculos", icon: Car },
-      { title: "Clientes", href: "/clientes", icon: Users },
-      // { title: "Fornecedores", href: "/suppliers", icon: Package },
-      // { title: "Clientes", href: "/customers", icon: Users },
-      // { title: "Motoristas", href: "/drivers", icon: UserCircle },
-      // { title: "Marcas e Modelos", href: "/marcas", icon: Car },
-      // { title: "Categorias de Veículos", href: "/categorias-veiculos", icon: FolderOpen },
-      // { title: "Reservas", href: "/reservas", icon: Calendar },
-    ],
-  },
+  // {
+  //   title: "Principal",
+  //   items: [
+  //     // { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  //     // { title: "Veículos", href: "/veiculos", icon: Car },
+  //     // { title: "Clientes", href: "/clientes", icon: Users },
+  //     // { title: "Fornecedores", href: "/suppliers", icon: Package },
+  //     // { title: "Clientes", href: "/customers", icon: Users },
+  //     // { title: "Motoristas", href: "/drivers", icon: UserCircle },
+  //     // { title: "Marcas e Modelos", href: "/marcas", icon: Car },
+  //     // { title: "Categorias de Veículos", href: "/categorias-veiculos", icon: FolderOpen },
+  //     // { title: "Reservas", href: "/reservas", icon: Calendar },
+  //   ],
+  // },
   // {
   //   title: "Gestao",
   //   items: [

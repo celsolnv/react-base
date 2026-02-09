@@ -26,10 +26,10 @@ export default function AuthLayout() {
           </div>
           <div className="space-y-1">
             <h1 className="text-foreground text-2xl font-bold tracking-tight">
-              Classe A
+              Nome do Sistema
             </h1>
             <p className="text-muted-foreground text-sm">
-              Sistema de Gestao de Frota
+              Descrição do Sistema
             </p>
           </div>
         </div>
@@ -39,7 +39,7 @@ export default function AuthLayout() {
 
         {/* Footer */}
         <p className="text-muted-foreground/60 text-center text-xs">
-          &copy; {new Date().getFullYear()} Classe A Locadora. Todos os direitos
+          &copy; {new Date().getFullYear()} Nome do Sistema. Todos os direitos
           reservados.
         </p>
       </div>

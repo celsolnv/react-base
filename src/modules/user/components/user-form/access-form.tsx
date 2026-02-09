@@ -19,7 +19,6 @@ export function AccessForm() {
       icon={<Lock className="text-foreground/80 h-5 w-5" />}
     >
       <InputForm
-        control={form.control}
         label="E-mail"
         name="email"
         type="email"
@@ -29,7 +28,6 @@ export function AccessForm() {
         className="col-span-12 sm:col-span-6"
       />
       <InputPasswordForm
-        control={form.control}
         label="Senha"
         name="password"
         placeholder="Senha"

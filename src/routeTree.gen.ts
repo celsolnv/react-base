@@ -15,13 +15,10 @@ import { Route as PublicAuthRouteImport } from './app/_public/_auth'
 import { Route as PrivatePerfilRouteImport } from './app/_private/perfil'
 import { Route as PrivateUsuariosIndexRouteImport } from './app/_private/usuarios/index'
 import { Route as PrivateNivelAcessoIndexRouteImport } from './app/_private/nivel-acesso/index'
-import { Route as PrivateClientesIndexRouteImport } from './app/_private/clientes/index'
 import { Route as PrivateUsuariosCriarRouteImport } from './app/_private/usuarios/criar'
 import { Route as PrivateUsuariosUser_idRouteImport } from './app/_private/usuarios/$user_id'
 import { Route as PrivateNivelAcessoCriarRouteImport } from './app/_private/nivel-acesso/criar'
 import { Route as PrivateNivelAcessoAccess_profile_idRouteImport } from './app/_private/nivel-acesso/$access_profile_id'
-import { Route as PrivateClientesCriarRouteImport } from './app/_private/clientes/criar'
-import { Route as PrivateClientesClient_idRouteImport } from './app/_private/clientes/$client_id'
 import { Route as PublicAuthResetPasswordIndexRouteImport } from './app/_public/_auth/reset-password/index'
 import { Route as PublicAuthLoginIndexRouteImport } from './app/_public/_auth/login/index'
 import { Route as PublicAuthForgotPasswordIndexRouteImport } from './app/_public/_auth/forgot-password/index'
@@ -54,11 +51,6 @@ const PrivateNivelAcessoIndexRoute = PrivateNivelAcessoIndexRouteImport.update({
   path: '/nivel-acesso/',
   getParentRoute: () => PrivateRoute,
 } as any)
-const PrivateClientesIndexRoute = PrivateClientesIndexRouteImport.update({
-  id: '/clientes/',
-  path: '/clientes/',
-  getParentRoute: () => PrivateRoute,
-} as any)
 const PrivateUsuariosCriarRoute = PrivateUsuariosCriarRouteImport.update({
   id: '/usuarios/criar',
   path: '/usuarios/criar',
@@ -78,17 +70,6 @@ const PrivateNivelAcessoAccess_profile_idRoute =
   PrivateNivelAcessoAccess_profile_idRouteImport.update({
     id: '/nivel-acesso/$access_profile_id',
     path: '/nivel-acesso/$access_profile_id',
-    getParentRoute: () => PrivateRoute,
-  } as any)
-const PrivateClientesCriarRoute = PrivateClientesCriarRouteImport.update({
-  id: '/clientes/criar',
-  path: '/clientes/criar',
-  getParentRoute: () => PrivateRoute,
-} as any)
-const PrivateClientesClient_idRoute =
-  PrivateClientesClient_idRouteImport.update({
-    id: '/clientes/$client_id',
-    path: '/clientes/$client_id',
     getParentRoute: () => PrivateRoute,
   } as any)
 const PublicAuthResetPasswordIndexRoute =
@@ -112,13 +93,10 @@ const PublicAuthForgotPasswordIndexRoute =
 export interface FileRoutesByFullPath {
   '/': typeof PrivateIndexRoute
   '/perfil': typeof PrivatePerfilRoute
-  '/clientes/$client_id': typeof PrivateClientesClient_idRoute
-  '/clientes/criar': typeof PrivateClientesCriarRoute
   '/nivel-acesso/$access_profile_id': typeof PrivateNivelAcessoAccess_profile_idRoute
   '/nivel-acesso/criar': typeof PrivateNivelAcessoCriarRoute
   '/usuarios/$user_id': typeof PrivateUsuariosUser_idRoute
   '/usuarios/criar': typeof PrivateUsuariosCriarRoute
-  '/clientes/': typeof PrivateClientesIndexRoute
   '/nivel-acesso/': typeof PrivateNivelAcessoIndexRoute
   '/usuarios/': typeof PrivateUsuariosIndexRoute
   '/forgot-password/': typeof PublicAuthForgotPasswordIndexRoute
@@ -128,13 +106,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/perfil': typeof PrivatePerfilRoute
   '/': typeof PrivateIndexRoute
-  '/clientes/$client_id': typeof PrivateClientesClient_idRoute
-  '/clientes/criar': typeof PrivateClientesCriarRoute
   '/nivel-acesso/$access_profile_id': typeof PrivateNivelAcessoAccess_profile_idRoute
   '/nivel-acesso/criar': typeof PrivateNivelAcessoCriarRoute
   '/usuarios/$user_id': typeof PrivateUsuariosUser_idRoute
   '/usuarios/criar': typeof PrivateUsuariosCriarRoute
-  '/clientes': typeof PrivateClientesIndexRoute
   '/nivel-acesso': typeof PrivateNivelAcessoIndexRoute
   '/usuarios': typeof PrivateUsuariosIndexRoute
   '/forgot-password': typeof PublicAuthForgotPasswordIndexRoute
@@ -147,13 +122,10 @@ export interface FileRoutesById {
   '/_private/perfil': typeof PrivatePerfilRoute
   '/_public/_auth': typeof PublicAuthRouteWithChildren
   '/_private/': typeof PrivateIndexRoute
-  '/_private/clientes/$client_id': typeof PrivateClientesClient_idRoute
-  '/_private/clientes/criar': typeof PrivateClientesCriarRoute
   '/_private/nivel-acesso/$access_profile_id': typeof PrivateNivelAcessoAccess_profile_idRoute
   '/_private/nivel-acesso/criar': typeof PrivateNivelAcessoCriarRoute
   '/_private/usuarios/$user_id': typeof PrivateUsuariosUser_idRoute
   '/_private/usuarios/criar': typeof PrivateUsuariosCriarRoute
-  '/_private/clientes/': typeof PrivateClientesIndexRoute
   '/_private/nivel-acesso/': typeof PrivateNivelAcessoIndexRoute
   '/_private/usuarios/': typeof PrivateUsuariosIndexRoute
   '/_public/_auth/forgot-password/': typeof PublicAuthForgotPasswordIndexRoute
@@ -165,13 +137,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/perfil'
-    | '/clientes/$client_id'
-    | '/clientes/criar'
     | '/nivel-acesso/$access_profile_id'
     | '/nivel-acesso/criar'
     | '/usuarios/$user_id'
     | '/usuarios/criar'
-    | '/clientes/'
     | '/nivel-acesso/'
     | '/usuarios/'
     | '/forgot-password/'
@@ -181,13 +150,10 @@ export interface FileRouteTypes {
   to:
     | '/perfil'
     | '/'
-    | '/clientes/$client_id'
-    | '/clientes/criar'
     | '/nivel-acesso/$access_profile_id'
     | '/nivel-acesso/criar'
     | '/usuarios/$user_id'
     | '/usuarios/criar'
-    | '/clientes'
     | '/nivel-acesso'
     | '/usuarios'
     | '/forgot-password'
@@ -199,13 +165,10 @@ export interface FileRouteTypes {
     | '/_private/perfil'
     | '/_public/_auth'
     | '/_private/'
-    | '/_private/clientes/$client_id'
-    | '/_private/clientes/criar'
     | '/_private/nivel-acesso/$access_profile_id'
     | '/_private/nivel-acesso/criar'
     | '/_private/usuarios/$user_id'
     | '/_private/usuarios/criar'
-    | '/_private/clientes/'
     | '/_private/nivel-acesso/'
     | '/_private/usuarios/'
     | '/_public/_auth/forgot-password/'
@@ -262,13 +225,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateNivelAcessoIndexRouteImport
       parentRoute: typeof PrivateRoute
     }
-    '/_private/clientes/': {
-      id: '/_private/clientes/'
-      path: '/clientes'
-      fullPath: '/clientes/'
-      preLoaderRoute: typeof PrivateClientesIndexRouteImport
-      parentRoute: typeof PrivateRoute
-    }
     '/_private/usuarios/criar': {
       id: '/_private/usuarios/criar'
       path: '/usuarios/criar'
@@ -295,20 +251,6 @@ declare module '@tanstack/react-router' {
       path: '/nivel-acesso/$access_profile_id'
       fullPath: '/nivel-acesso/$access_profile_id'
       preLoaderRoute: typeof PrivateNivelAcessoAccess_profile_idRouteImport
-      parentRoute: typeof PrivateRoute
-    }
-    '/_private/clientes/criar': {
-      id: '/_private/clientes/criar'
-      path: '/clientes/criar'
-      fullPath: '/clientes/criar'
-      preLoaderRoute: typeof PrivateClientesCriarRouteImport
-      parentRoute: typeof PrivateRoute
-    }
-    '/_private/clientes/$client_id': {
-      id: '/_private/clientes/$client_id'
-      path: '/clientes/$client_id'
-      fullPath: '/clientes/$client_id'
-      preLoaderRoute: typeof PrivateClientesClient_idRouteImport
       parentRoute: typeof PrivateRoute
     }
     '/_public/_auth/reset-password/': {
@@ -338,13 +280,10 @@ declare module '@tanstack/react-router' {
 interface PrivateRouteChildren {
   PrivatePerfilRoute: typeof PrivatePerfilRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
-  PrivateClientesClient_idRoute: typeof PrivateClientesClient_idRoute
-  PrivateClientesCriarRoute: typeof PrivateClientesCriarRoute
   PrivateNivelAcessoAccess_profile_idRoute: typeof PrivateNivelAcessoAccess_profile_idRoute
   PrivateNivelAcessoCriarRoute: typeof PrivateNivelAcessoCriarRoute
   PrivateUsuariosUser_idRoute: typeof PrivateUsuariosUser_idRoute
   PrivateUsuariosCriarRoute: typeof PrivateUsuariosCriarRoute
-  PrivateClientesIndexRoute: typeof PrivateClientesIndexRoute
   PrivateNivelAcessoIndexRoute: typeof PrivateNivelAcessoIndexRoute
   PrivateUsuariosIndexRoute: typeof PrivateUsuariosIndexRoute
 }
@@ -352,14 +291,11 @@ interface PrivateRouteChildren {
 const PrivateRouteChildren: PrivateRouteChildren = {
   PrivatePerfilRoute: PrivatePerfilRoute,
   PrivateIndexRoute: PrivateIndexRoute,
-  PrivateClientesClient_idRoute: PrivateClientesClient_idRoute,
-  PrivateClientesCriarRoute: PrivateClientesCriarRoute,
   PrivateNivelAcessoAccess_profile_idRoute:
     PrivateNivelAcessoAccess_profile_idRoute,
   PrivateNivelAcessoCriarRoute: PrivateNivelAcessoCriarRoute,
   PrivateUsuariosUser_idRoute: PrivateUsuariosUser_idRoute,
   PrivateUsuariosCriarRoute: PrivateUsuariosCriarRoute,
-  PrivateClientesIndexRoute: PrivateClientesIndexRoute,
   PrivateNivelAcessoIndexRoute: PrivateNivelAcessoIndexRoute,
   PrivateUsuariosIndexRoute: PrivateUsuariosIndexRoute,
 }

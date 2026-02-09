@@ -91,14 +91,7 @@ export const useUserList = () => {
       }),
     });
   };
-  const handleSectorChange = (newSector: string) => {
-    navigate({
-      search: (old) => ({
-        ...old,
-        sector_id: newSector ? [newSector] : undefined,
-      }),
-    });
-  };
+
   const columns = useMemo(
     () =>
       getColumns({
@@ -124,7 +117,6 @@ export const useUserList = () => {
     columns,
     totalCount: rest.count,
     params,
-    handleSectorChange,
     handleStatusChange,
   };
 };

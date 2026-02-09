@@ -171,8 +171,10 @@ const LoadingScreen = () => {
               ease: [0.16, 1, 0.3, 1],
             }}
           >
-            CLASSE{" "}
-            <span className="text-muted-foreground ml-3 font-light">A</span>
+            Nome do Sistema{" "}
+            <span className="text-muted-foreground ml-3 font-light">
+              Descrição do Sistema
+            </span>
           </motion.h1>
 
           <motion.div

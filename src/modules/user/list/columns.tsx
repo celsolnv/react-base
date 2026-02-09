@@ -14,31 +14,15 @@ export function getColumns(actions: IUserTableActions) {
     [
       {
         accessorKey: "name",
-        header: "Usuário",
+        header: "Nome do Usuário",
         type: "text",
         className: "font-medium",
-      },
-      {
-        accessorKey: "job_role",
-        header: "Cargo",
-        type: "custom",
-        className: "font-medium",
-        cell: (_, row) => {
-          const value = row.job_role.name;
-          return value || "-";
-        },
       },
       {
         accessorKey: "email",
         header: "E-mail",
         type: "text",
         className: "text-muted-foreground",
-      },
-      {
-        accessorKey: "filial",
-        header: "Filial",
-        type: "text",
-        className: "font-medium",
       },
       {
         accessorKey: "is_active",

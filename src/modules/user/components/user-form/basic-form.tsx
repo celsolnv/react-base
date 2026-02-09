@@ -31,7 +31,6 @@ export function BasicForm() {
         className="col-span-12 sm:col-span-12"
       />
       <SelectForm
-        control={form.control}
         label="Tipo de documento"
         name="document_type"
         options={documentTypeOptions}
@@ -39,9 +38,7 @@ export function BasicForm() {
         required
         className="col-span-12 sm:col-span-4"
       />
-      {/* TODO: se for cpf vai ter mascara de cpf e se for cnpj vai ter mascara de cnpj */}
       <InputForm
-        control={form.control}
         label="Número do documento"
         name="document"
         placeholder="Número do documento"
@@ -50,7 +47,6 @@ export function BasicForm() {
         required
       />
       <InputForm
-        control={form.control}
         label="Data de nascimento"
         name="birth_date"
         type="date"
@@ -59,7 +55,6 @@ export function BasicForm() {
         className="col-span-12 sm:col-span-6"
       />
       <InputForm
-        control={form.control}
         label="Telefone"
         name="phone"
         type="tel"

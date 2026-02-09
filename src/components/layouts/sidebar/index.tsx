@@ -58,10 +58,10 @@ export function AppSidebar() {
           {!isCollapsed && (
             <div className="flex flex-col">
               <span className="text-foreground text-sm font-bold tracking-wide">
-                CLASSE A
+                Nome do Sistema
               </span>
               <span className="text-muted-foreground text-[10px] tracking-widest uppercase">
-                Locadora
+                Descrição do Sistema
               </span>
             </div>
           )}

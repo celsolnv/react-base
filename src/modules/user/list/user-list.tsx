@@ -1,7 +1,6 @@
 import { ShieldPlus } from "lucide-react";
 
 import {
-  AsyncSelect,
   DataTable,
   DataTablePagination,
   HeaderList,
@@ -9,7 +8,6 @@ import {
 } from "@/components/shared";
 import { SelectStatus } from "@/components/shared/select/select-status";
 
-import * as api from "../http/api";
 import { useUserList } from "./use-user-list";
 
 export default function UserListPage() {
@@ -20,7 +18,6 @@ export default function UserListPage() {
     params,
     handleSearchChange,
     handleStatusChange,
-    handleSectorChange,
   } = useUserList();
   return (
     <div className="flex h-full flex-col">
@@ -43,13 +40,6 @@ export default function UserListPage() {
             <SelectStatus
               value={params.is_active ?? "all"}
               onValueChange={handleStatusChange}
-            />
-            <AsyncSelect
-              value={params.sector_id ?? []}
-              onValueChange={(value) => handleSectorChange(value as string)}
-              fetchOptions={api.getSectorsOptions}
-              placeholder="Selecione o Setor"
-              multiple
             />
           </div>
 
