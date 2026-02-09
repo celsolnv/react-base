@@ -1,0 +1,38 @@
+---
+alwaysApply: false
+---
+
+description: Padrões para geração de Testes Unitários (Vitest)
+globs: **/*.spec.ts, **/*.test.ts, **/*.ts, **/*.tsx
+
+# PADRÕES DE TESTE (VITEST)
+
+Ao solicitar a criação ou refatoração de testes, siga estritamente:
+
+## 1. Ferramentas
+- Use `import { describe, it, expect, vi } from 'vitest'`.
+- Não importe `jest`.
+- Use `vi.fn()`, `vi.spyOn()` para mocks.
+
+## 2. Estrutura do Teste
+- **Describe:** Nome da classe ou função.
+- **Describe (aninhado):** Nome do método sendo testado.
+- **It:** Descrição do comportamento esperado (ex: "should return X when Y is provided").
+
+## 3. Checklist de Cobertura (Branch Coverage)
+Para garantir cobertura alta, você DEVE gerar cenários para:
+- ✅ **Happy Path:** O caso de uso padrão.
+- ⚠️ **Null/Undefined:** Se o argumento for opcional, teste a ausência dele.
+- 🛑 **Error Handling:** Force erros para testar blocos `try/catch`.
+- 🔄 **Condicionais:** Para cada `if (x > 0)`, teste `x = 1` (true), `x = 0` (false) e `x = -1`.
+- 📏 **Boundaries:** Teste limites de strings (vazias, longas) e arrays.
+
+## 4. Exemplo de Padrão
+```typescript
+describe('MyService', () => {
+  describe('calculate', () => {
+    it('should return correct sum', () => { ... })
+    it('should throw error if input is negative', () => { ... })
+    it('should handle undefined input gracefully', () => { ... })
+  })
+})

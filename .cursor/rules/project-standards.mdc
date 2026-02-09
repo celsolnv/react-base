@@ -1,0 +1,116 @@
+---
+description: Padrões de Arquitetura Modular, TanStack Router, Query e Tailwind v4
+globs: **/*.{ts,tsx,css}
+---
+
+# Contexto do Projeto
+
+Você é um especialista em React focado no ecossistema **TanStack** (Router, Query) e **Arquitetura Modular (Domain-Driven)**.
+
+## Tech Stack Principal
+
+- **Framework:** React + Vite
+- **Roteamento:** @tanstack/react-router (File-based routing em `src/app`)
+- **Estado/Dados:** @tanstack/react-query (v5)
+- **Estado de Sessão:** Zustand (Apenas para Tokens/Client State)
+- **Estilização:** Tailwind CSS v4 (Configuração CSS-first via `@theme`)
+- **UI:** Shadcn/UI (Radix primitives)
+
+---
+
+# 1. Arquitetura de Pastas (Modular)
+
+Nós seguimos estritamente uma arquitetura modular. **Não misture lógica de negócio na pasta de rotas.**
+
+### Estrutura de Diretórios
+
+- `src/app/`: **APENAS ROTEAMENTO**. Contém `__root.tsx`, layouts (`_auth.tsx`) e definições de rota. Os arquivos aqui devem ser magros e apenas conectar o Router aos Módulos.
+- `src/modules/`: **LÓGICA DE NEGÓCIO**. Cada feature tem sua pasta (ex: `src/modules/users`).
+  - `api/`: Funções puras do Axios (retornam Promises). Sem Hooks.
+  - `queries/`: Fábricas de `queryOptions` do TanStack Query.
+  - `mutations/`: Hooks customizados de escrita (Create/Update/Delete).
+  - `components/`: Componentes visuais específicos do módulo.
+  - `types/`: Tipos e DTOs locais.
+- `src/ui/`: Componentes genéricos/compartilhados (Shadcn, Buttons, Inputs).
+- `src/lib/`: Configurações de infra (Axios, QueryClient, Utils).
+
+---
+
+# 2. Padrões de Código (Regras de Ouro)
+
+## Data Fetching (O Pipeline "Service -> Option -> Loader")
+
+NUNCA use `useEffect` para buscar dados. Siga este fluxo:
+
+1. **Service (`modules/{feat}/api`):** Crie uma função assíncrona pura.
+
+    ```ts
+    // users-service.ts
+    export const usersService = {
+      getById: async (id: string) => (await api.get(`/users/${id}`)).data
+    }
+    ```
+
+2. **Options (`modules/{feat}/queries`):** Crie uma `queryOption`.
+
+    ```ts
+    // users-queries.ts
+    export const usersQueries = {
+      detail: (id: string) => queryOptions({
+        queryKey: ['users', 'detail', id],
+        queryFn: () => usersService.getById(id)
+      })
+    }
+    ```
+
+3. **Loader (`src/app/...`):** Pré-carregue na rota.
+
+    ```tsx
+    // src/app/users/$userId.tsx
+    loader: ({ context, params }) => 
+      context.queryClient.ensureQueryData(usersQueries.detail(params.userId))
+    ```
+
+4. **Componente:** Consuma com `useSuspenseQuery`.
+
+## TanStack Router
+
+- Use `createFileRoute` para definir rotas.
+- Para proteção de rotas (Auth), use `beforeLoad` e lance redirecionamentos:
+
+  ```tsx
+  if (!isAuthenticated) throw redirect({ to: '/login' })
+  Auth State: Ao fazer login/logout, SEMPRE chame await router.invalidate() antes de navegar, para garantir que os beforeLoad rodem novamente.
+
+Autenticação
+Use Zustand apenas para persistir o Token (Client State).
+
+Use React Query para manter o Objeto User (Server State).
+
+O fluxo de Login deve:
+
+Salvar Token (Zustand).
+
+Popular Cache do User (queryClient.setQueryData).
+
+Invalidar Router (router.invalidate()).
+
+Navegar.
+
+Tailwind CSS v4
+Não use tailwind.config.js. A configuração é feita no src/globals.css usando a diretiva @theme.
+
+Use variáveis CSS para cores (ex: bg-[var(--background)]).
+
+Mantenha o CSS limpo usando classes utilitárias.
+
+1. O que EVITAR (Anti-Patterns)
+❌ Colocar chamadas api.get() direto dentro de componentes.
+
+❌ Usar Redux para dados de servidor (Use React Query).
+
+❌ Criar lógica complexa dentro de src/app. Mova para src/modules.
+
+❌ Importar usando caminhos relativos longos (../../modules). Use o alias @/modules.
+
+❌ Esquecer de invalidar queries após uma Mutation de sucesso.

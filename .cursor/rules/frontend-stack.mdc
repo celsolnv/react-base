@@ -1,0 +1,67 @@
+---
+description: Stack Frontend (React, Vite, TanStack Router/Query, Tailwind v4, Shadcn)
+globs: **/*.tsx, **/*.ts, **/*.css
+alwaysApply: true
+---
+
+# TECNOLOGIAS
+
+- **Core:** React, TypeScript, Vite.
+- **Roteamento:** TanStack Router (File-based routing).
+- **Estado/Async:** TanStack Query (React Query).
+- **UI/Estilo:** Tailwind CSS v4, Shadcn/ui.
+- **Forms:** React Hook Form + Zod.
+
+# ESTRUTURA DE PASTAS E ARQUITETURA
+
+## 1. API & Data Fetching (Camada Estrita)
+
+O projeto separa a definição da requisição da lógica de cache/hook.
+
+- **`src/api/req/`**: Contém as funções assíncronas puras (axios/fetch).
+  - *Regra:* Apenas executa a chamada HTTP e tipa o retorno. Não usa hooks aqui.
+- **`src/api/callers/`**: Contém os Custom Hooks do React Query.
+  - *Regra:* Aqui importamos a função de `req` e a envolvemos em `useQuery` ou `useMutation`.
+  - *Padrão:* `export const use[Nome] = () => useQuery(...)`.
+- **Componentes:** NUNCA faça requisições diretas (`axios.get`) ou use `useEffect` para fetch. Sempre chame o hook de `callers`.
+
+## 2. Roteamento (TanStack Router)
+
+- O projeto usa geração de rotas (`routeTree.gen.ts`).
+- Definições de rotas ficam em `src/routes/` ou `src/app/` (conforme configuração do File Routes).
+- **NÃO** use `react-router-dom`. Use os componentes `Link`, `Outlet` e hooks `useRouter` do `@tanstack/react-router`.
+
+# UI & THEMING (TAILWIND v4 + SHADCN)
+
+## 1. Dark/Light Mode (Semantic Colors)
+
+O projeto utiliza um sistema de tema baseado em variáveis CSS (Shadcn/UI).
+
+- **NUNCA use cores hardcoded** para estrutura (ex: `bg-white`, `text-black`, `border-gray-200`). Isso quebra o Dark Mode.
+- **Use Tokens Semânticos:**
+  - Fundo: `bg-background`, `bg-card`, `bg-muted`.
+  - Texto: `text-foreground`, `text-muted-foreground`.
+  - Borda: `border-border`, `border-input`.
+  - Ação: `bg-primary`, `text-primary-foreground`.
+- **Prefix `dark:`:** Evite usar `dark:bg-xxx`. Use a variável semântica correta (`bg-background`) que o Tailwind v4 e o CSS resolverão a cor automaticamente baseada na classe `.dark` no root.
+
+## 2. Tailwind v4
+
+- Configuração via CSS nativo (`@theme`). Não procure por `tailwind.config.js` complexos.
+- Use sintaxe de valores arbitrários se necessário, mas prefira os tokens do design system.
+
+# PADRÕES DE CÓDIGO
+
+## Formulários (RHF + Zod)
+
+- Nunca controle formulários complexos com `useState`.
+- Padrão obrigatório:
+  1. Definir Schema Zod (`formSchema`).
+  2. Tipar com `z.infer<typeof formSchema>`.
+  3. Usar `useForm<Type>({ resolver: zodResolver(schema) })`.
+  4. Usar componentes de `Form` do Shadcn (`FormField`, `FormItem`, `FormControl`).
+
+## TypeScript e Imports
+
+- Use Path Aliases: `@/components/ui/...`, `@/api/...`.
+- Interfaces de Props devem ser explícitas. Evite `any`.

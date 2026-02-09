@@ -1,0 +1,27 @@
+---
+description: Impede a criação automática de arquivos de documentação (.md, README)
+globs: **/*
+alwaysApply: true
+---
+
+
+# NO MARKDOWN FILE CREATION
+
+**Regra Principal:** Você está estritamente **PROIBIDO** de criar, sugerir a criação ou atualizar arquivos de documentação com extensão `.md` (Markdown), a menos que o usuário solicite explicitamente.
+
+## Diretrizes de Comportamento
+
+1. **Zero "Lixo" no Projeto:**
+    - Não crie arquivos como `README.md`, `CHANGELOG.md`, `TODO.md`, `CONTRIBUTING.md` ou `docs/*.md`.
+    - O foco deve ser 100% em código executável (`.ts`, `.tsx`, `.css`, etc.) e configuração.
+
+2. **Explicações apenas no Chat:**
+    - Se precisar explicar como algo funciona, use o chat.
+    - Nunca sugira: "Vou criar um arquivo NOTES.md para explicar isso".
+
+3. **Respeite o File System:**
+    - Mantenha a árvore de arquivos limpa. Se o usuário pedir para "Refatorar o módulo X", a resposta deve conter apenas os arquivos de código alterados, sem adicionar arquivos de texto explicativos.
+
+## Exceção Única
+
+- Esta regra só pode ser ignorada se o prompt do usuário contiver instruções explícitas como: *"Crie um README"*, *"Gere a documentação"* ou *"Escreva um arquivo .md"*.

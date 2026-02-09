@@ -1,0 +1,15 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import * as api from "../api";
+import { userKeys } from "../queries";
+
+export const useToggleStatusUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: api.toggleStatus,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+    },
+  });
+};

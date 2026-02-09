@@ -1,0 +1,28 @@
+---
+description: Padrões de Nomenclatura TypeScript (Interfaces e Types)
+globs: **/*.ts, **/*.tsx
+alwaysApply: true
+---
+# NAMING CONVENTIONS
+
+Siga estritamente as convenções de nomenclatura abaixo ao gerar código TypeScript.
+
+## Regras
+
+1. **Interfaces:**
+    - DEVEM sempre começar com a letra `I` maiúscula.
+    - Use PascalCase.
+    - **Exemplo:** `interface IUserData { ... }`, `interface IAuthResponse { ... }`
+
+2. **Types (Type Aliases):**
+    - DEVEM sempre começar com a letra `T` maiúscula.
+    - Use PascalCase.
+    - **Exemplo:** `type TUserRole = 'admin' | 'user'`, `type TButtonProps = { ... }`
+
+3. **Generics:**
+    - Para tipos genéricos, use `T` seguido de um nome descritivo ou apenas `T` se for simples.
+    - **Exemplo:** `class DataProvider<TData> { ... }`
+
+## Correção Automática
+
+Se você encontrar código no contexto que não segue esse padrão (ex: `interface User`), refatore-o para o padrão correto (`interface IUser`) ao editá-lo.

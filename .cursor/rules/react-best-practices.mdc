@@ -1,0 +1,90 @@
+---
+description: Melhores práticas React, Arquitetura Limpa, DRY e SOLID (SRP)
+alwaysApply: false
+---
+
+# REACT BEST PRACTICES & ARCHITECTURE GUIDELINES
+
+Ao gerar ou refatorar componentes React, siga estritamente estes princípios para garantir escalabilidade e manutenibilidade.
+
+## 1. Single Responsibility Principle (SRP)
+
+**Separe a Visualização (View) da Lógica (Model/ViewModel).**
+
+- **Componentes de UI (`src/components/ui`):**
+  - Devem ser "burros" (Stateless ou apenas estado visual simples).
+  - Recebem dados via props.
+  - Não fazem chamadas de API.
+  - Não contêm lógica de negócio complexa.
+  - **Exemplo:** `Button`, `Input`, `Table`.
+
+- **Componentes Compartilhados (`src/components/shared`):**
+  - Compõem componentes de UI para criar funcionalidades reutilizáveis.
+  - Podem ter estado local, mas prefira extrair a lógica complexa para Hooks.
+  - **Exemplo:** `DataTable` (que usa `Table` + `Pagination`).
+
+- **Custom Hooks (A Camada de Lógica):**
+  - Toda lógica de estado complexo, efeitos colaterais (`useEffect`), e manipulação de dados deve ser extraída para um Hook personalizado.
+  - O componente deve apenas chamar o hook e renderizar o resultado.
+  - **Padrão:** `const { table } = useDataTable(...)` -> `<DataTable table={table} />`.
+
+## 2. DRY (Don't Repeat Yourself)
+
+**Evite boilerplate repetitivo. Use Patterns de Abstração.**
+
+- **Factories & Builders:**
+  - Se você está escrevendo arrays de configuração repetitivos (como colunas de tabela ou campos de formulário), crie um **Builder**.
+  - **Exemplo:** Em vez de definir colunas manualmente com JSX repetido, use `buildColumns([...config])`.
+
+- **Componentes Genéricos:**
+  - Se um bloco de código (JSX + CSS) se repete em 3 ou mais lugares, extraia para um componente em `src/components/shared`.
+
+- **Utilitários:**
+  - Lógicas de formatação (data, moeda, string) devem estar em `@/lib/utils` ou `@/lib/formatters`, nunca hardcoded no JSX.
+
+## 3. Estrutura de Pastas e Responsabilidades
+
+- **`src/components/ui/`**: Primitivos do Shadcn UI (Visual puro). **NUNCA** adicione lógica de negócio aqui.
+- **`src/components/shared/`**: Componentes complexos reutilizáveis em toda a app (ex: `DataTable`, `PageHeader`).
+- **`src/modules/[feature]/components/`**: Componentes específicos de uma funcionalidade que não são reutilizados fora dela.
+
+## 4. Gerenciamento de Estado e Prop Drilling
+
+- **Evite Prop Drilling:** Não passe props por mais de 2 níveis.
+- **Composição:** Prefira passar componentes como `children` ou slots (ex: `header={<Header />}`) em vez de passar dados brutos para renderizar lá dentro.
+- **Context/Zustand/Query:** Para estados globais ou assíncronos, use as ferramentas apropriadas, não `useState` na raiz.
+
+## 5. Padrões de Código (Anti-Patterns a Evitar)
+
+- ❌ **Lógica no JSX:** Evite ternários aninhados ou funções anônimas longas no `onClick`. Extraia para variáveis ou handlers nomeados.
+- ❌ **UseEffect Abusivo:** Não use `useEffect` para calcular dados derivados de props ou state. Use `useMemo` ou derive diretamente na renderização.
+- ❌ **Any:** Nunca use `any`. Defina interfaces explícitas para todas as props e retornos de hooks.
+
+## Exemplo de Refatoração (De -> Para)
+
+**Ruim (Acoplado):**
+
+```tsx
+function UserTable() {
+  const [users, setUsers] = useState([])
+  // ... lógica de fetch misturada
+  // ... definição de colunas misturada no JSX
+  return <table>...</table>
+}
+Bom (SRP + DRY):
+
+TypeScript
+
+function UserTable() {
+  // 1. Lógica isolada
+  const { data, isLoading } = useUsersQuery(); 
+  
+  // 2. Configuração isolada (Builder)
+  const columns = useMemo(() => buildColumns(userColumnsConfig), []);
+  
+  // 3. Lógica de Tabela isolada (Headless)
+  const { table } = useDataTable({ data, columns });
+
+  // 4. Visualização Pura
+  return <DataTable table={table} isLoading={isLoading} />
+}

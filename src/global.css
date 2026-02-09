@@ -1,0 +1,1064 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/manrope";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================
+   ARMORED ELITE FLEET - Design System
+   Ultra Dark Monochromatic Theme
+   Font: Manrope
+   Style: Enterprise Dashboard, Premium Security
+
+   WCAG AA Contrast Requirements:
+   - Normal text: 4.5:1 minimum
+   - Large text (18px+): 3:1 minimum
+   - UI components: 3:1 minimum
+   ============================================ */
+
+:root {
+  --radius: 0.5rem;
+
+  /* === BASE === */
+  --background: oklch(0.98 0 0);
+  /* #fafafa - Light bg */
+  --foreground: oklch(0.15 0 0);
+  /* #1a1a1a - Dark text */
+
+  /* === CARD === */
+  --card: oklch(1 0 0);
+  /* #ffffff */
+  --card-foreground: oklch(0.15 0 0);
+  /* #1a1a1a */
+
+  /* === POPOVER / DROPDOWN / TOOLTIP === */
+  --popover: oklch(1 0 0);
+  /* #ffffff */
+  --popover-foreground: oklch(0.15 0 0);
+  /* #1a1a1a */
+
+  /* === PRIMARY (main brand color) === */
+  --primary: oklch(0.15 0 0);
+  /* #1a1a1a */
+  --primary-foreground: oklch(1 0 0);
+  /* #ffffff */
+
+  /* === SECONDARY === */
+  --secondary: oklch(0.93 0 0);
+  /* #e8e8e8 */
+  --secondary-foreground: oklch(0.25 0 0);
+  /* #333333 */
+
+  /* === MUTED === */
+  --muted: oklch(0.93 0 0);
+  /* #e8e8e8 */
+  --muted-foreground: oklch(0.45 0 0);
+  /* #666666 */
+
+  /* === ACCENT === */
+  --accent: oklch(0.93 0 0);
+  /* #e8e8e8 */
+  --accent-foreground: oklch(0.15 0 0);
+  /* #1a1a1a */
+
+  /* === DESTRUCTIVE === */
+  --destructive: oklch(0.55 0.22 25);
+  /* Red */
+  --destructive-foreground: oklch(1 0 0);
+  /* #ffffff */
+
+  /* === BORDERS & INPUTS === */
+  --border: oklch(0.85 0 0);
+  /* #cccccc */
+  --input: oklch(0.85 0 0);
+  /* #cccccc */
+  --ring: oklch(0.15 0 0);
+  /* #1a1a1a */
+
+  /* === CHART COLORS (Light mode - dark values) === */
+  --chart-1: oklch(0.25 0 0);
+  /* Darkest */
+  --chart-2: oklch(0.35 0 0);
+  --chart-3: oklch(0.50 0 0);
+  --chart-4: oklch(0.65 0 0);
+  --chart-5: oklch(0.80 0 0);
+  /* Lightest */
+
+  /* === SIDEBAR === */
+  --sidebar: oklch(0.98 0 0);
+  --sidebar-foreground: oklch(0.15 0 0);
+  --sidebar-primary: oklch(0.15 0 0);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.93 0 0);
+  --sidebar-accent-foreground: oklch(0.15 0 0);
+  --sidebar-border: oklch(0.85 0 0);
+  --sidebar-ring: oklch(0.15 0 0);
+
+  /* === CUSTOM SEMANTIC COLORS === */
+  --success: oklch(0.55 0.18 145);
+  /* Green */
+  --success-foreground: oklch(1 0 0);
+  /* White */
+  --warning: oklch(0.75 0.15 85);
+  /* Yellow/Orange */
+  --warning-foreground: oklch(0.20 0 0);
+  /* Dark for contrast */
+  --info: oklch(0.55 0.18 250);
+  /* Blue */
+  --info-foreground: oklch(1 0 0);
+  /* White */
+}
+
+/* ============================================
+   DARK MODE - Primary Theme (Default for this app)
+   Ultra dark monochromatic design
+   ============================================ */
+.dark {
+  /* === BASE === */
+  --background: oklch(0.12 0 0);
+  /* #141414 - Dark bg */
+  --foreground: oklch(0.95 0 0);
+  /* #f0f0f0 - Light text */
+
+  /* === CARD === */
+  --card: oklch(0.18 0 0);
+  /* #1f1f1f - Card surface */
+  --card-foreground: oklch(0.95 0 0);
+  /* #f0f0f0 */
+
+  /* === POPOVER / DROPDOWN / TOOLTIP === */
+  --popover: oklch(0.20 0 0);
+  /* #242424 */
+  --popover-foreground: oklch(0.95 0 0);
+  /* #f0f0f0 */
+
+  /* === PRIMARY (white buttons on dark) === */
+  --primary: oklch(0.95 0 0);
+  /* #f0f0f0 - Off-white */
+  --primary-foreground: oklch(0.12 0 0);
+  /* #141414 - Dark */
+
+  /* === SECONDARY === */
+  --secondary: oklch(0.25 0 0);
+  /* #333333 - Visible dark */
+  --secondary-foreground: oklch(0.85 0 0);
+  /* #cccccc - Light text */
+
+  /* === MUTED === */
+  --muted: oklch(0.22 0 0);
+  /* #2a2a2a */
+  --muted-foreground: oklch(0.65 0 0);
+  /* #999999 - Readable dim text */
+
+  /* === ACCENT === */
+  --accent: oklch(0.25 0 0);
+  /* #333333 */
+  --accent-foreground: oklch(0.95 0 0);
+  /* #f0f0f0 */
+
+  /* === DESTRUCTIVE === */
+  --destructive: oklch(0.65 0.25 25);
+  /* Brighter red for better contrast */
+  --destructive-foreground: oklch(1 0 0);
+  /* #ffffff */
+
+  /* === BORDERS & INPUTS === */
+  --border: oklch(0.30 0 0);
+  /* #404040 - Visible border */
+  --input: oklch(0.30 0 0);
+  /* #404040 */
+  --ring: oklch(0.50 0 0);
+  /* #6b6b6b - Focus ring */
+
+  /* === CHART COLORS (Monochromatic scale - visible on dark) === */
+  --chart-1: oklch(0.95 0 0);
+  /* Lightest - white */
+  --chart-2: oklch(0.80 0 0);
+  /* Light grey */
+  --chart-3: oklch(0.65 0 0);
+  /* Medium grey */
+  --chart-4: oklch(0.50 0 0);
+  /* Darker grey */
+  --chart-5: oklch(0.35 0 0);
+  /* Darkest visible */
+
+  /* === SIDEBAR === */
+  --sidebar: oklch(0.15 0 0);
+  /* #1a1a1a */
+  --sidebar-foreground: oklch(0.95 0 0);
+  /* #f0f0f0 */
+  --sidebar-primary: oklch(0.95 0 0);
+  /* Off-white */
+  --sidebar-primary-foreground: oklch(0.12 0 0);
+  /* Dark */
+  --sidebar-accent: oklch(0.25 0 0);
+  /* #333333 */
+  --sidebar-accent-foreground: oklch(0.95 0 0);
+  /* #f0f0f0 */
+  --sidebar-border: oklch(0.30 0 0);
+  /* #404040 */
+  --sidebar-ring: oklch(0.50 0 0);
+  /* #6b6b6b */
+
+  /* === CUSTOM SEMANTIC COLORS === */
+  --success: oklch(0.70 0.18 145);
+  /* Bright green */
+  --success-foreground: oklch(0.15 0 0);
+  /* Dark */
+  --warning: oklch(0.80 0.15 85);
+  /* Yellow/Orange */
+  --warning-foreground: oklch(0.15 0 0);
+  /* Dark */
+  --info: oklch(0.65 0.18 250);
+  /* Blue */
+  --info-foreground: oklch(1 0 0);
+  /* White */
+}
+
+@theme inline {
+  /* === COLORS === */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* === CHART COLORS === */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* === SIDEBAR === */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* === SEMANTIC COLORS === */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  /* === BORDER RADIUS === */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  /* === TYPOGRAPHY === */
+  --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+}
+
+/* ============================================
+   CUSTOM UTILITIES
+   ============================================ */
+
+/* Glass panel effect - Light Mode */
+.glass-panel {
+  background: oklch(1 0 0 / 80%);
+  backdrop-filter: blur(12px);
+  border: 1px solid oklch(0 0 0 / 10%);
+}
+
+/* Glass panel effect - Dark Mode */
+.dark .glass-panel {
+  background: oklch(0.18 0 0 / 95%);
+  border: 1px solid oklch(1 0 0 / 10%);
+}
+
+/* Metal gradient effect - Light Mode */
+.bg-metal-gradient {
+  background: linear-gradient(135deg,
+      oklch(0 0 0 / 3%) 0%,
+      oklch(0 0 0 / 1%) 50%,
+      oklch(0 0 0 / 3%) 100%);
+}
+
+/* Metal gradient effect - Dark Mode */
+.dark .bg-metal-gradient {
+  background: linear-gradient(135deg,
+      oklch(1 0 0 / 5%) 0%,
+      oklch(1 0 0 / 2%) 50%,
+      oklch(1 0 0 / 5%) 100%);
+}
+
+/* Glow effect - Light Mode */
+.shadow-glow {
+  box-shadow: 0 0 20px oklch(0 0 0 / 8%);
+}
+
+/* Glow effect - Dark Mode */
+.dark .shadow-glow {
+  box-shadow: 0 0 20px oklch(1 0 0 / 10%);
+}
+
+/* Card shadow - Light Mode */
+.shadow-card {
+  box-shadow:
+    0 0 0 1px oklch(0 0 0 / 5%),
+    0 4px 24px oklch(0 0 0 / 10%);
+}
+
+/* Card shadow - Dark Mode */
+.dark .shadow-card {
+  box-shadow:
+    0 0 0 1px oklch(1 0 0 / 10%),
+    0 4px 24px oklch(0 0 0 / 60%);
+}
+
+/* Subtle shadow - Light Mode */
+.shadow-subtle {
+  box-shadow: 0 4px 6px -1px oklch(0 0 0 / 10%);
+}
+
+/* Subtle shadow - Dark Mode */
+.dark .shadow-subtle {
+  box-shadow: 0 4px 6px -1px oklch(0 0 0 / 50%);
+}
+
+/* Status dot for indicators */
+.status-dot {
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ============================================
+   SCROLLBAR STYLING - Global Custom Scrollbar
+   Ultra Dark Monochromatic Theme
+   ============================================ */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: oklch(0.12 0 0);
+  border-radius: 0;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: oklch(0.25 0 0);
+  border-radius: 5px;
+  border: 2px solid oklch(0.12 0 0);
+  transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.35 0 0);
+}
+
+*::-webkit-scrollbar-corner {
+  background: oklch(0.12 0 0);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.25 0 0) oklch(0.12 0 0);
+}
+
+/* Light mode scrollbar */
+:root:not(.dark) *::-webkit-scrollbar-track {
+  background: oklch(0.98 0 0);
+}
+
+:root:not(.dark) *::-webkit-scrollbar-thumb {
+  background: oklch(0.70 0 0);
+  border: 2px solid oklch(0.98 0 0);
+}
+
+:root:not(.dark) *::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.60 0 0);
+}
+
+:root:not(.dark) * {
+  scrollbar-color: oklch(0.70 0 0) oklch(0.98 0 0);
+}
+
+/* Utility class for custom scrollbar (backward compatibility) */
+.scrollbar-dark::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.scrollbar-dark::-webkit-scrollbar-track {
+  background: oklch(0.12 0 0);
+}
+
+.scrollbar-dark::-webkit-scrollbar-thumb {
+  background: oklch(0.25 0 0);
+  border-radius: 5px;
+  border: 2px solid oklch(0.12 0 0);
+}
+
+.scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.35 0 0);
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ============================================
+   AUTOFILL OVERRIDES
+   Neutralize browser autofill styles to maintain
+   design system consistency
+   ============================================ */
+
+/* Light mode autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px oklch(0.98 0 0) inset !important;
+  -webkit-text-fill-color: oklch(0.15 0 0) !important;
+  caret-color: oklch(0.15 0 0) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Dark mode autofill */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active,
+.dark textarea:-webkit-autofill,
+.dark textarea:-webkit-autofill:hover,
+.dark textarea:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill:active,
+.dark select:-webkit-autofill,
+.dark select:-webkit-autofill:hover,
+.dark select:-webkit-autofill:focus,
+.dark select:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px oklch(0.18 0 0) inset !important;
+  -webkit-text-fill-color: oklch(0.95 0 0) !important;
+  caret-color: oklch(0.95 0 0) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ============================================
+   DATE INPUT CALENDAR ICON STYLING
+   Style the native calendar picker icon
+   ============================================ */
+
+/* Light mode - calendar icon should be dark */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0) saturate(100%);
+  opacity: 0.6;
+  cursor: pointer;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Firefox */
+input[type="date"]::-moz-calendar-picker-indicator {
+  filter: brightness(0) saturate(100%);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+input[type="date"]::-moz-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Dark mode - calendar icon should be light (using foreground token) */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0) invert(1) saturate(100%);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.dark input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Firefox dark mode */
+.dark input[type="date"]::-moz-calendar-picker-indicator {
+  filter: brightness(0) invert(1) saturate(100%);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.dark input[type="date"]::-moz-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ============================================
+   FULLCALENDAR CUSTOM STYLES
+   Integração completa com Design System
+   ============================================ */
+
+/* Base - Tipografia, container e variáveis CSS */
+.fc {
+  font-family: var(--font-sans);
+  color: var(--foreground);
+
+  /* Borders */
+  --fc-border-color: var(--border);
+  --fc-daygrid-event-dot-width: 6px;
+
+  /* Button colors */
+  --fc-button-bg-color: var(--background);
+  --fc-button-border-color: var(--border);
+  --fc-button-text-color: var(--foreground);
+  --fc-button-hover-bg-color: var(--muted);
+  --fc-button-hover-border-color: var(--border);
+  --fc-button-active-bg-color: var(--primary);
+  --fc-button-active-border-color: var(--primary);
+  --fc-button-active-text-color: var(--primary-foreground);
+
+  /* Today and highlight */
+  --fc-today-bg-color: var(--accent);
+  --fc-highlight-color: var(--accent);
+
+  /* Event defaults (overridden by inline styles) */
+  --fc-event-bg-color: var(--primary);
+  --fc-event-border-color: var(--primary);
+  --fc-event-text-color: var(--primary-foreground);
+
+  /* Neutral background */
+  --fc-neutral-bg-color: var(--muted);
+
+  /* More border colors */
+  --fc-col-header-cell-cushion: var(--muted-foreground);
+  --fc-daygrid-day-number: var(--foreground);
+}
+
+/* Dark mode adjustments */
+.dark .fc {
+  --fc-today-bg-color: var(--accent);
+  --fc-highlight-color: var(--accent);
+}
+
+/* ============================================
+   TOOLBAR E NAVEGAÇÃO
+   ============================================ */
+.fc .fc-toolbar {
+  padding: 0.75rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+.fc .fc-button {
+  background-color: var(--fc-button-bg-color);
+  border: 1px solid var(--fc-button-border-color);
+  color: var(--fc-button-text-color);
+  text-transform: capitalize;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.fc .fc-button:hover:not(:disabled) {
+  background-color: var(--fc-button-hover-bg-color);
+  border-color: var(--fc-button-hover-border-color);
+  color: var(--foreground);
+}
+
+.fc .fc-button:focus:not(:disabled) {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.fc .fc-button-primary:not(:disabled):active,
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: var(--fc-button-active-bg-color);
+  border-color: var(--fc-button-active-border-color);
+  color: var(--fc-button-active-text-color);
+}
+
+.fc .fc-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button group spacing */
+.fc .fc-button-group>.fc-button {
+  margin-right: 0.25rem;
+}
+
+.fc .fc-button-group>.fc-button:last-child {
+  margin-right: 0;
+}
+
+/* ============================================
+   CABEÇALHOS E ESTRUTURA
+   ============================================ */
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border-color: var(--border);
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border-color: var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.fc .fc-col-header-cell {
+  background-color: var(--secondary);
+  border-color: var(--border);
+  padding: 0.5rem 0;
+}
+
+.fc .fc-col-header-cell-cushion {
+  color: var(--muted-foreground);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  font-family: var(--font-sans);
+  padding: 0.5rem;
+  display: block;
+}
+
+/* ============================================
+   CÉLULAS E DIAS
+   ============================================ */
+.fc .fc-daygrid-day {
+  background-color: var(--card);
+  border-color: var(--border);
+  transition: background-color 0.2s ease;
+  /* Altura fixa para células - não expandir */
+  height: 120px !important;
+  min-height: 120px !important;
+  max-height: 120px !important;
+}
+
+.fc .fc-daygrid-day:hover {
+  background-color: var(--muted);
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: var(--accent);
+  position: relative;
+}
+
+.fc .fc-daygrid-day.fc-day-today::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--primary);
+  z-index: 1;
+}
+
+/* Container do frame do dia - altura fixa e scroll interno */
+.fc .fc-daygrid-day-frame {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Container de eventos - scroll interno quando necessário */
+.fc .fc-daygrid-day-events {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.25rem;
+  /* Estilizar scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) transparent;
+  /* Garantir que eventos não expandam o container */
+  max-height: calc(100% - 2.5rem);
+  /* Altura total menos espaço do número do dia */
+}
+
+.fc .fc-daygrid-day-events::-webkit-scrollbar {
+  width: 4px;
+}
+
+.fc .fc-daygrid-day-events::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.fc .fc-daygrid-day-events::-webkit-scrollbar-thumb {
+  background-color: var(--muted-foreground);
+  border-radius: 2px;
+  opacity: 0.5;
+}
+
+.fc .fc-daygrid-day-events::-webkit-scrollbar-thumb:hover {
+  opacity: 0.8;
+}
+
+/* Garantir que eventos individuais não expandam a célula */
+.fc .fc-daygrid-day-events .fc-event {
+  margin-bottom: 0.125rem;
+  flex-shrink: 0;
+}
+
+/* Número do dia - fixo no topo */
+.fc .fc-daygrid-day-number {
+  color: var(--foreground);
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  font-family: var(--font-sans);
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+  color: var(--accent-foreground);
+  font-weight: 600;
+}
+
+.fc .fc-daygrid-day.fc-day-other .fc-daygrid-day-number {
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}
+
+/* Garantir que as linhas da tabela tenham altura fixa */
+.fc .fc-daygrid-body .fc-scrollgrid-sync-table tbody tr {
+  height: 120px !important;
+  min-height: 120px !important;
+  max-height: 120px !important;
+}
+
+.fc .fc-daygrid-body .fc-scrollgrid-sync-table tbody tr td {
+  height: 120px !important;
+  min-height: 120px !important;
+  max-height: 120px !important;
+  vertical-align: top;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Garantir que células não expandam */
+.fc .fc-daygrid-body .fc-scrollgrid-sync-table tbody tr td .fc-daygrid-day {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+}
+
+/* Garantir que o número do dia fique no topo */
+.fc .fc-daygrid-day-top {
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+/* Link "mais eventos" - estilização */
+.fc .fc-daygrid-more-link {
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  margin-top: 0.25rem;
+  display: block;
+  text-align: center;
+  border-radius: var(--radius);
+  background-color: var(--muted);
+  transition: all 0.2s ease;
+}
+
+.fc .fc-daygrid-more-link:hover {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* ============================================
+   EVENTOS
+   ============================================ */
+.fc-event,
+.fc-event-custom {
+  border-radius: var(--radius);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-width: 1px;
+  border-style: solid;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  line-height: 1.4;
+}
+
+.fc-event:hover,
+.fc-event-custom:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  position: relative;
+}
+
+/* Tooltip customizado para eventos - usando atributo title nativo melhorado */
+.fc-event[title],
+.fc-timegrid-event[title] {
+  cursor: pointer;
+}
+
+/* Tooltip customizado via CSS para melhor controle visual */
+.fc-event[data-tooltip-added="true"]:hover,
+.fc-timegrid-event[data-tooltip-added="true"]:hover {
+  position: relative;
+  z-index: 100;
+}
+
+.fc-event .fc-event-title {
+  font-weight: 500;
+  padding: 0;
+}
+
+.fc-event .fc-event-time {
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+/* Event dots (dayGrid view) */
+.fc-daygrid-event-dot {
+  border-color: var(--primary);
+  border-width: 4px;
+}
+
+/* ============================================
+   TIME GRID (Week/Day views)
+   ============================================ */
+.fc-timeGridDay-view .fc-timegrid-slot,
+.fc-timeGridWeek-view .fc-timegrid-slot {
+  border-color: var(--border);
+  height: 3rem;
+}
+
+.fc-timegrid-slot-label {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.5rem;
+  border-color: var(--border);
+}
+
+.fc-timegrid-col {
+  border-color: var(--border);
+}
+
+.fc-timegrid-col-events {
+  margin: 0.25rem;
+}
+
+.fc-timegrid-event {
+  border-radius: var(--radius);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-width: 1px;
+  border-style: solid;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fc-timegrid-event:hover {
+  opacity: 0.9;
+  transform: translateX(2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fc-timegrid-now-indicator-line {
+  border-color: var(--primary);
+  border-width: 2px;
+}
+
+.fc-timegrid-now-indicator-arrow {
+  border-color: var(--primary);
+}
+
+/* ============================================
+   SELEÇÃO E INTERAÇÃO
+   ============================================ */
+.fc-highlight {
+  background-color: var(--accent);
+  opacity: 0.2;
+  border-radius: var(--radius);
+}
+
+.fc-selectable {
+  cursor: pointer;
+}
+
+.fc-selectable:hover {
+  background-color: var(--muted);
+}
+
+/* ============================================
+   SCROLLBARS (quando necessário)
+   ============================================ */
+.fc-scroller {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-foreground) transparent;
+}
+
+.fc-scroller::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.fc-scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb {
+  background-color: var(--muted-foreground);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb:hover {
+  opacity: 0.8;
+}
+
+/* ============================================
+   RESPONSIVIDADE
+   ============================================ */
+@media (max-width: 768px) {
+  .fc .fc-toolbar {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .fc .fc-toolbar-title {
+    font-size: 1rem;
+  }
+
+  .fc .fc-button {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.5rem;
+  }
+
+  .fc .fc-col-header-cell-cushion {
+    font-size: 0.625rem;
+    padding: 0.25rem;
+  }
+
+  .fc .fc-daygrid-day-number {
+    font-size: 0.75rem;
+    padding: 0.25rem;
+  }
+
+  .fc-event {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.375rem;
+  }
+}
+
+/* ============================================
+   DARK MODE ESPECÍFICO
+   ============================================ */
+.dark .fc .fc-daygrid-day.fc-day-today {
+  background-color: var(--accent);
+}
+
+.dark .fc .fc-col-header-cell {
+  background-color: var(--secondary);
+}
+
+.dark .fc .fc-button:hover:not(:disabled) {
+  background-color: var(--muted);
+}
+
+.dark .fc-event:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+input[type="date"] {
+  position: relative;
+  padding-left: 40px;
+  box-sizing: border-box;
+}
+
+input[type="date"]:disabled {
+  padding: 8px 12px;
+}
