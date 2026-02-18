@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { genericListSchema } from "@/constants/schemas/list";
-import * as queries from "@/modules/{{nameKebab}}/http/queries";
-import  {{namePascal}}ListPage from "@/modules/{{nameKebab}}/list/{{nameKebab}}-list";
-import { {{namePascal}}ListPageSkeleton } from "@/modules/{{nameKebab}}/list/{{nameKebab}}-list-skeleton";
+import * as queries from "@/modules/__nameKebab__/http/queries";
+import __namePascal__ListPage from "@/modules/__nameKebab__/list/__nameKebab__-list";
+import { __namePascal__ListPageSkeleton } from "@/modules/__nameKebab__/list/__nameKebab__-list-skeleton";
+import { list__namePascal__Schema } from "@/modules/__nameKebab__/list/schema";
 
-const schema = genericListSchema.extend({});
+const schema = list__namePascal__Schema;
 
 export const Route = createFileRoute("/_private/usuarios/")({
   validateSearch: (search) => schema.parse(search),
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_private/usuarios/")({
   loader: ({ context, deps }) => {
     return context.queryClient.ensureQueryData(queries.listQuery(deps));
   },
-  pendingComponent: {{namePascal}}ListPageSkeleton,
+  pendingComponent: __namePascal__ListPageSkeleton,
   pendingMs: 0,
-  component: {{namePascal}}ListPage,
+  component: __namePascal__ListPage,
 });

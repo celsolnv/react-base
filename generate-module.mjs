@@ -25,7 +25,6 @@ async function generateModule() {
     console.error("❌ Erro: Use --pt=nome-do-modulo");
     process.exit(1);
   }
-
   const nameKebab = toKebabCase(nameArg);
   const config = {
     single: { 
@@ -43,10 +42,9 @@ async function generateModule() {
     labelPt
   };
 
-  // --- ONDE ESTAVA O ERRO: Agora o script busca pelas chaves ---
   const template = { 
-    kebab: '{{nameKebab}}', 
-    pascal: '{{namePascal}}', 
+    kebab: '__nameKebab__', 
+    pascal: '__namePascal__', 
     camel: '{{nameCamel}}',
     snake: '{{nameSnake}}',
     label: '{{labelPt}}'
@@ -107,3 +105,6 @@ async function generateModule() {
 }
 
 generateModule();
+
+// Comando para rodar abaixo
+// npm run gen:module -- --name=product --pt='produto'

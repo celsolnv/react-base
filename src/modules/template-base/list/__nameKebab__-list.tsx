@@ -8,17 +8,11 @@ import {
 } from "@/components/shared";
 import { SelectStatus } from "@/components/shared/select/select-status";
 
-import { use{{namePascal}}List } from "./use-{{nameKebab}}-list";
+import { use__namePascal__List } from "./use-__nameKebab__-list";
 
-export default function {{namePascal}}ListPage() {
-  const {
-    table,
-    columns,
-    totalCount,
-    params,
-    handleSearchChange,
-    handleStatusChange,
-  } = use{{namePascal}}List();
+export default function __namePascal__ListPage() {
+  const { table, columns, totalCount, params, handleParamsChange } =
+    use__namePascal__List();
   return (
     <div className="flex h-full flex-col">
       <div className="space-y-6">
@@ -28,18 +22,22 @@ export default function {{namePascal}}ListPage() {
           description="Gerencie os {{labelPt}}"
           buttonText="Novo {{labelPt}}"
           buttonIcon={<ShieldPlus className="mr-2 h-4 w-4" />}
-          buttonLink="/{{nameKebab}}/criar"
+          buttonLink="/__nameKebab__/criar"
         />
         <div className="border-border bg-card shadow-card flex h-full flex-col overflow-hidden rounded-lg border">
           {/* Filtros e Busca */}
           <div className="bg-secondary/30 border-border flex shrink-0 items-center gap-4 border-b p-4">
             <InputSearch
               search={params.search ?? ""}
-              handleSearchChange={handleSearchChange}
+              handleSearchChange={(value) =>
+                handleParamsChange({ ...params, search: value })
+              }
             />
             <SelectStatus
-              value={params.is_active}
-              onValueChange={handleStatusChange}
+              value={params.is_active ?? "all"}
+              onValueChange={(value) =>
+                handleParamsChange({ ...params, is_active: value })
+              }
             />
           </div>
 

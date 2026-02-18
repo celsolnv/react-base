@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import type { TUpdate{{namePascal}}Schema } from "../../update/schema";
+import type { TUpdate__namePascal__Schema } from "../../update/schema";
 import * as api from "../api";
-import { {{namePascal}}Keys } from "../queries";
+import { __namePascal__Keys } from "../queries";
 
-export default function use{{namePascal}}UpdateMutation() {
+export default function use__namePascal__UpdateMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -12,12 +12,12 @@ export default function use{{namePascal}}UpdateMutation() {
       data,
       id,
     }: {
-      data: TUpdate{{namePascal}}Schema;
+      data: TUpdate__namePascal__Schema;
       id: string;
     }) => api.update(data, id),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: {{namePascal}}Keys.lists(),
+        queryKey: __namePascal__Keys.lists(),
       });
     },
   });

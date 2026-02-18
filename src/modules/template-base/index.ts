@@ -1,4 +1,4 @@
-import {{namePascal}}ListPage from "./list/{{nameKebab}}-list";
-import { {{namePascal}}ListPageSkeleton } from "./list/{{nameKebab}}-list-skeleton";
+import __namePascal__ListPage from "./list/__nameKebab__-list";
+import { __namePascal__ListPageSkeleton } from "./list/__nameKebab__-list-skeleton";
 
-export { {{namePascal}}ListPage, {{namePascal}}ListPageSkeleton };
+export { __namePascal__ListPage, __namePascal__ListPageSkeleton };

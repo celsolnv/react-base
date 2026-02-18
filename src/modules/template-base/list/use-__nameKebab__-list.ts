@@ -7,14 +7,15 @@ import { toast } from "sonner";
 
 import { useDataTable } from "@/components/shared";
 
-import  useDelete{{namePascal}} from "../http/mutations/use-{{nameKebab}}-delete";
-import  useToggleStatus{{namePascal}} from "../http/mutations/use-{{nameKebab}}-toggle-status";
+import useDelete__namePascal__ from "../http/mutations/use-__nameKebab__-delete";
+import useToggleStatus__namePascal__ from "../http/mutations/use-__nameKebab__-toggle-status";
 import { listQuery } from "../http/queries";
 import { getColumns } from "./columns";
+import type { TList__namePascal__Schema } from "./schema";
 
 const routeApi = getRouteApi("/_private/{{labelPt}}/");
 
-export const use{{namePascal}}List = () => {
+export const use__namePascal__List = () => {
   const params = routeApi.useSearch();
   const navigate = routeApi.useNavigate();
   const deps = routeApi.useLoaderDeps();
@@ -22,14 +23,14 @@ export const use{{namePascal}}List = () => {
     data: { data, ...rest },
   } = useSuspenseQuery(listQuery(deps));
 
-  const deleteMutation = useDelete{{namePascal}}();
-  const toggleStatusMutation = useToggleStatus{{namePascal}}();
+  const deleteMutation = useDelete__namePascal__();
+  const toggleStatusMutation = useToggleStatus__namePascal__();
 
   const handleUpdate = useCallback(
     (id: string) => {
       navigate({
-        to: "/{{nameKebab}}/${{nameKebab}}_id",
-        params: { "{{nameKebab}}_id": id },
+        to: "/__nameKebab__/$__nameKebab___id",
+        params: { "__nameKebab___id": id },
       });
     },
     [navigate]
@@ -78,22 +79,15 @@ export const use{{namePascal}}List = () => {
     });
   };
 
-  const handleSearchChange = (newSearch: string) => {
+  const handleParamsChange = (newParams: TList__namePascal__Schema) => {
     navigate({
       search: (old) => ({
         ...old,
-        search: newSearch,
+        ...newParams,
       }),
     });
   };
-  const handleStatusChange = (newStatus: string) => {
-    navigate({
-      search: (old) => ({
-        ...old,
-        is_active: newStatus,
-      }),
-    });
-  };
+
 
   const columns = useMemo(
     () =>
@@ -116,11 +110,10 @@ export const use{{namePascal}}List = () => {
   });
 
   return {
-    handleSearchChange,
+    handleParamsChange,
     table,
     columns,
     totalCount: rest.count,
     params,
-    handleStatusChange,
   };
 };

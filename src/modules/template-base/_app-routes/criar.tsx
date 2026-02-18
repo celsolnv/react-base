@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import {{namePascal}}CreatePage from "@/modules/{{nameKebab}}/create/{{nameKebab}}-create";
+import __namePascal__CreatePage from "@/modules/__nameKebab__/create/__nameKebab__-create";
 
-export const Route = createFileRoute("/_private/{{nameKebab}}/criar")({
-  component: {{namePascal}}CreatePage,
+export const Route = createFileRoute("/_private/__nameKebab__/criar")({
+  component: __namePascal__CreatePage,
 });

@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function {{namePascal}}ListPageSkeleton() {
+export function __namePascal__ListPageSkeleton() {
   return (
     <div className="flex h-full flex-col">
       <div className="space-y-6">
@@ -34,7 +34,7 @@ export function {{namePascal}}ListPageSkeleton() {
 
               {/* Table Body - 5 rows */}
               <div className="p-0">
-                {Array.from({ length: 5 }).map((_, i) => (
+                {Array.from({ length: 5 }, (_, index) => index).map((i) => (
                   <div key={i} className="flex h-16 items-center border-b px-4">
                     <Skeleton className="mr-4 h-4 w-[40px]" />
                     <Skeleton className="mr-auto h-4 w-[200px]" />

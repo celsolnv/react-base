@@ -1,28 +1,23 @@
 import { Edit, Power, Trash2 } from "lucide-react";
 
 import { buildColumns } from "@/components/shared";
-import type { IAccessProfile } from "@/types/IAcessProfile";
 
-export interface IAccessProfileTableActions {
-  onEdit: (profile: IAccessProfile) => void;
-  onDelete: (profile: IAccessProfile) => void;
-  onDeactivate: (profile: IAccessProfile) => void;
+import type { I__namePascal__ } from "../types";
+
+export interface I__namePascal__TableActions {
+  onEdit: (profile: I__namePascal__) => void;
+  onDelete: (profile: I__namePascal__) => void;
+  onDeactivate: (profile: I__namePascal__) => void;
 }
 
-export function getColumns(actions: IAccessProfileTableActions) {
-  return buildColumns<IAccessProfile>(
+export function getColumns(actions: I__namePascal__TableActions) {
+  return buildColumns<I__namePascal__>(
     [
       {
         accessorKey: "name",
         header: "Nome do Perfil",
         type: "text",
         className: "font-medium",
-      },
-      {
-        accessorKey: "note",
-        header: "Descrição",
-        type: "text",
-        className: "max-w-[500px] truncate text-muted-foreground",
       },
       {
         accessorKey: "is_active",

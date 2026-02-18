@@ -7,12 +7,12 @@ import { useBottomNav } from "@/components/layouts/bottom-nav/use-bottom-nav";
 import { HeaderList } from "@/components/shared";
 import { cn } from "@/lib/utils";
 
-import { {{namePascal}}Form } from "../components/{{nameKebab}}-form";
-import { useCreate{{namePascal}} } from "./use-{{nameKebab}}-create";
+import { __namePascal__Form } from "../components/form";
+import { useCreate__namePascal__ } from "./use-__nameKebab__-create";
 
-export default function Create{{namePascal}}Page() {
+export default function Create__namePascal__Page() {
   const { form, isSubmitting, handleCancel, handleSubmit } =
-    useCreate{{namePascal}}();
+    useCreate__namePascal__();
 
   const { isActive: isBottomNavActive } = useBottomNav();
 
@@ -29,7 +29,7 @@ export default function Create{{namePascal}}Page() {
             <div
               className={cn("space-y-6", isBottomNavActive ? "pb-24" : "pb-4")}
             >
-              <{{namePascal}}Form />
+              <__namePascal__Form />
             </div>
           </div>
         </form>
