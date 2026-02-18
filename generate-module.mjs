@@ -108,3 +108,5 @@ generateModule();
 
 // Comando para rodar abaixo
 // npm run gen:module -- --name=product --pt='produto'
+// Em seguida rode o eslint para corrigir os arquivos gerados
+// npx eslint --fix src/modules/product
