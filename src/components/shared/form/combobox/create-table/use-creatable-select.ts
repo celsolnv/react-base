@@ -71,10 +71,7 @@ export function useCreatableSelect(props: TCreatableSelectProps) {
   const handleSelect = React.useCallback(
     (opt: IOption) => {
       if (multiple) {
-        (props.onChange as (v: IOption[]) => void)([
-          ...(props.value as IOption[]),
-          opt,
-        ]);
+        (props.onChange as (v: IOption[]) => void)([...props.value, opt]);
       } else {
         (props.onChange as (v: IOption | null) => void)(opt);
         setOpen(false);

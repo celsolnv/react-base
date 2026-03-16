@@ -2,17 +2,21 @@ import { X } from "lucide-react";
 
 import { Badge } from "@/components/ui";
 
-import {
-  type IOption,
-  type TCreatableSelectProps,
-} from "./use-creatable-select";
+import { type IOption } from "./use-creatable-select";
+
+interface ITriggerContentProps {
+  value: IOption | IOption[] | null;
+  multiple?: boolean;
+  placeholder: string;
+  handleRemove: (value: string) => void;
+}
 
 export function TriggerContent({
   value,
   multiple,
   placeholder,
   handleRemove,
-}: Partial<TCreatableSelectProps> & { handleRemove: (value: string) => void }) {
+}: Readonly<ITriggerContentProps>) {
   if (multiple) {
     const vals = value as IOption[];
     if (vals.length === 0) {
