@@ -1,11 +1,12 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi } from "@tanstack/react-router";
 import type { PaginationState } from "@tanstack/react-table";
 import { toast } from "sonner";
 
-import { useDataTable } from "@/components/shared";
+import { useDataTable } from "@/components/shared/data-table/use-data-table";
+import { useConfirmStore } from "@/hooks/use-confirm-store";
 
 import { useDeleteUser } from "../http/mutations/use-delete-user";
 import { useToggleStatusUser } from "../http/mutations/use-toggle-status-user";
@@ -15,15 +16,18 @@ import { getColumns } from "./columns";
 const routeApi = getRouteApi("/_private/usuarios/");
 
 export const useUserList = () => {
+  const [openImportModal, setOpenImportModal] = useState(false);
   const params = routeApi.useSearch();
   const navigate = routeApi.useNavigate();
   const deps = routeApi.useLoaderDeps();
   const {
     data: { data, ...rest },
+    refetch,
   } = useSuspenseQuery(listQuery(deps));
 
   const deleteMutation = useDeleteUser();
   const toggleStatusMutation = useToggleStatusUser();
+  const confirm = useConfirmStore((state) => state.confirm);
 
   const handleUpdate = useCallback(
     (id: string) => {
@@ -34,9 +38,18 @@ export const useUserList = () => {
 
   const handleDelete = useCallback(
     (id: string) => {
-      deleteMutation.mutate(id);
+      confirm({
+        title: "Excluir Usuário",
+        message:
+          "Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.",
+        variant: "destructive",
+      }).then((confirmed) => {
+        if (confirmed) {
+          deleteMutation.mutate(id);
+        }
+      });
     },
-    [deleteMutation]
+    [deleteMutation, confirm]
   );
 
   const handleToggleStatus = useCallback(
@@ -56,6 +69,10 @@ export const useUserList = () => {
     },
     [toggleStatusMutation]
   );
+
+  const handleImport = () => {
+    setOpenImportModal(true);
+  };
 
   const pagination = useMemo<PaginationState>(
     () => ({
@@ -80,6 +97,7 @@ export const useUserList = () => {
       search: (old) => ({
         ...old,
         search: newSearch,
+        page: 1,
       }),
     });
   };
@@ -88,6 +106,7 @@ export const useUserList = () => {
       search: (old) => ({
         ...old,
         is_active: newStatus,
+        page: 1,
       }),
     });
   };
@@ -95,9 +114,9 @@ export const useUserList = () => {
   const columns = useMemo(
     () =>
       getColumns({
-        onEdit: (user) => handleUpdate(user.id),
-        onDelete: (user) => handleDelete(user.id),
-        onDeactivate: (user) => handleToggleStatus(user.id, user.is_active),
+        onEdit: (staff) => handleUpdate(staff.id),
+        onDelete: (staff) => handleDelete(staff.id),
+        onDeactivate: (staff) => handleToggleStatus(staff.id, staff.is_active),
       }),
     [handleUpdate, handleDelete, handleToggleStatus]
   );
@@ -118,5 +137,9 @@ export const useUserList = () => {
     totalCount: rest.count,
     params,
     handleStatusChange,
+    handleImport,
+    openImportModal,
+    setOpenImportModal,
+    refetch,
   };
 };

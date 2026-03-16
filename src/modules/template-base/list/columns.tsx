@@ -1,6 +1,6 @@
 import { Edit, Power, Trash2 } from "lucide-react";
 
-import { buildColumns } from "@/components/shared";
+import { buildColumns } from "@/components/shared/data-table/column-builder";
 
 import type { I__namePascal__ } from "../types";
 

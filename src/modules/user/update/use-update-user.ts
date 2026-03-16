@@ -4,11 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getRouteApi, useNavigate } from "@tanstack/react-router";
 
-import {
-  type TUpdateUserSchema,
-  updateUserSchema,
-} from "../constants/update-schema";
 import { useUpdateUserMutation } from "../http/mutations/use-update-user";
+import { type TUpdateUserSchema, updateUserSchema } from "./schema";
 import { formatUserResponse } from "./utils";
 
 const routeApi = getRouteApi("/_private/usuarios/$user_id");

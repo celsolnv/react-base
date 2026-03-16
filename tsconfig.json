@@ -13,7 +13,25 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ]
+      ],
+      "@/ui/*": [
+        "./src/components/ui/*"
+      ],
+      "@/shared/*": [
+        "./src/components/shared/*"
+      ],
+      "@/lib/*": [
+        "./src/lib/*"
+      ],
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/types/*": [
+        "./src/types/*"
+      ],
+      "@/modules/*": [
+        "./src/modules/*"
+      ],
     },
     "noImplicitAny": false,
     "noUnusedParameters": false,

@@ -1,6 +1,6 @@
 export * from "./address-form";
 export * from "./button";
-export * from "./card/card";
+export * from "./card/card-form";
 export * from "./combobox/async-combobox";
 export * from "./file";
 export * from "./input/input-form";
@@ -8,5 +8,7 @@ export * from "./input/input-form-currency";
 export * from "./input/input-form-percentage";
 export * from "./input/input-password";
 export * from "./input/input-phone";
+export * from "./media-upload";
 export * from "./select/select-form";
+export * from "./switch/switch-form";
 export * from "./textarea/textarea-form";

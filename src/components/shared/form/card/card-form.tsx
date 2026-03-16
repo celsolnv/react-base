@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/shadcn";
+} from "@/ui/card";
 
 import { CardFormSkeleton } from "./card-form-skeleton";
 

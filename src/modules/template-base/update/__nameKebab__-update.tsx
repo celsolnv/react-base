@@ -4,7 +4,7 @@ import { Save } from "lucide-react";
 
 import { PageBottomNav } from "@/components/layouts/bottom-nav/page-bottom-nav";
 import { useBottomNav } from "@/components/layouts/bottom-nav/use-bottom-nav";
-import { HeaderList } from "@/components/shared";
+import { HeaderList } from "@/components/shared/header-list";
 import { cn } from "@/lib/utils";
 
 import { __namePascal__Form } from "../components/form";

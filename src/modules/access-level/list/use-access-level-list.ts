@@ -5,12 +5,14 @@ import { getRouteApi } from "@tanstack/react-router";
 import type { PaginationState } from "@tanstack/react-table";
 import { toast } from "sonner";
 
-import { useDataTable } from "@/components/shared";
+import { useDataTable } from "@/components/shared/data-table/use-data-table";
+import { useConfirmStore } from "@/hooks/use-confirm-store";
 
 import { useDeleteAccessLevel } from "../mutations/use-delete-access-level";
 import { useToggleStatusAccessLevel } from "../mutations/use-toggle-status-access-level";
 import { listQuery } from "../queries";
 import { getColumns } from "./columns";
+import type { TAccessLevelListSchema } from "./schema";
 
 const routeApi = getRouteApi("/_private/nivel-acesso/");
 
@@ -21,6 +23,7 @@ export const useAccessLevelList = () => {
   const {
     data: { data, ...rest },
   } = useSuspenseQuery(listQuery(deps));
+  const confirm = useConfirmStore((state) => state.confirm);
 
   const deleteMutation = useDeleteAccessLevel();
   const toggleStatusMutation = useToggleStatusAccessLevel();
@@ -37,9 +40,18 @@ export const useAccessLevelList = () => {
 
   const handleDelete = useCallback(
     (id: string) => {
-      deleteMutation.mutate(id);
+      confirm({
+        title: "Excluir Nível de Acesso",
+        message:
+          "Tem certeza que deseja excluir este nível de acesso? Esta ação não pode ser desfeita.",
+        variant: "destructive",
+      }).then((confirmed) => {
+        if (confirmed) {
+          deleteMutation.mutate(id);
+        }
+      });
     },
-    [deleteMutation]
+    [deleteMutation, confirm]
   );
 
   const handleToggleStatus = useCallback(
@@ -78,23 +90,13 @@ export const useAccessLevelList = () => {
     });
   };
 
-  const handleSearchChange = (newSearch: string) => {
+  const handleParamsChange = (newParams: TAccessLevelListSchema) => {
     navigate({
       search: (old) => ({
         ...old,
+        ...newParams,
         page: 1,
-        search: newSearch,
       }),
-      replace: true,
-    });
-  };
-  const handleStatusChange = (newStatus: string) => {
-    navigate({
-      search: (old) => ({
-        ...old,
-        is_active: newStatus,
-      }),
-      replace: true,
     });
   };
 
@@ -119,11 +121,10 @@ export const useAccessLevelList = () => {
   });
 
   return {
-    handleSearchChange,
+    handleParamsChange,
     table,
     columns,
     totalCount: rest.count,
     params,
-    handleStatusChange,
   };
 };

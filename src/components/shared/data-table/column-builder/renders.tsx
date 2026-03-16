@@ -1,15 +1,16 @@
 import { MoreHorizontal } from "lucide-react";
 
+import { usePermission } from "@/hooks/use-permission";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/ui/badge";
+import { Button } from "@/ui/button";
 import {
-  Badge,
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/shadcn";
-import { cn } from "@/lib/utils";
+} from "@/ui/dropdown-menu";
 import { formatCurrency } from "@/utils/formatters/currency";
 import { formatDate } from "@/utils/formatters/date";
 
@@ -154,12 +155,27 @@ export function renderBooleanCell<TData>(
   );
 }
 
-export function renderActionsCell<TData>(
-  row: TData,
-  actions: TableAction<TData>[]
-): React.ReactNode {
-  // Filtra ações visíveis
-  const visibleActions = actions.filter((action) => !action.hidden?.(row));
+interface IActionsCellProps<TData> {
+  row: TData;
+  actions: TableAction<TData>[];
+}
+
+/**
+ * Componente de célula de ações com suporte a verificação de permissões
+ */
+export function ActionsCell<TData>({ row, actions }: IActionsCellProps<TData>) {
+  const { can } = usePermission();
+
+  // Filtra ações visíveis baseado em hidden e permission
+  const visibleActions = actions.filter((action) => {
+    // Se tiver hidden e retornar true, oculta a ação
+    if (action.hidden?.(row)) return false;
+
+    // Se tiver permission definida, verifica se o usuário tem a permissão
+    if (action.permission && !can(action.permission)) return false;
+
+    return true;
+  });
 
   if (visibleActions.length === 0) return null;
 
@@ -196,4 +212,11 @@ export function renderActionsCell<TData>(
       </DropdownMenuContent>
     </DropdownMenu>
   );
+}
+
+export function renderActionsCell<TData>(
+  row: TData,
+  actions: TableAction<TData>[]
+): React.ReactNode {
+  return <ActionsCell row={row} actions={actions} />;
 }

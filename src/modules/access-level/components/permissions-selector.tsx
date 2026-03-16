@@ -2,7 +2,6 @@ import { useMemo } from "react";
 
 import { ShieldCheck } from "lucide-react";
 
-import { PermissionGroup } from "@/components/shared/permission-group";
 import {
   Card,
   CardContent,
@@ -13,11 +12,12 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PermissionGroup } from "@/modules/access-level/components/permission-group";
 import {
   getAllPermissionIds,
   groupPermissionsByResource,
   type IPermission,
-} from "@/lib/permissions-helper";
+} from "@/modules/access-level/components/permissions-helper";
 
 interface IPermissionsSelectorProps {
   readonly permissions: IPermission[];
@@ -141,8 +141,8 @@ export function PermissionsSelector({
           </div>
         </CardHeader>
         <CardContent className="space-y-4 pt-6">
-          {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-14 w-full" />
+          {[1, 2, 3].map((item) => (
+            <Skeleton key={item} className="h-14 w-full" />
           ))}
         </CardContent>
       </Card>

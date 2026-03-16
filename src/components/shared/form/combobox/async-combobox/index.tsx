@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import {
   type Control,
   type FieldValues,
@@ -8,26 +8,26 @@ import {
 
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 
+import { useDebounce } from "@/hooks/use-debounce";
+import { cn } from "@/lib/utils";
+import { Button } from "@/ui/button";
 import {
-  Button,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
+} from "@/ui/command";
+import {
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/shadcn";
-import { useDebounce } from "@/hooks/useDebounce";
-import { cn } from "@/lib/utils";
+} from "@/ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover";
 
 export interface IAsyncComboboxOption {
   id: string;
@@ -55,6 +55,63 @@ interface IAsyncComboboxProps<T extends FieldValues> {
   onSelect?: (item: any) => void;
 }
 
+type TComboboxState = {
+  open: boolean;
+  searchQuery: string;
+  isLoading: boolean;
+  results: IAsyncComboboxOption[];
+  selectedLabel: string;
+};
+
+type TComboboxAction =
+  | { type: "SET_OPEN"; payload: boolean }
+  | { type: "SET_SEARCH"; payload: string }
+  | { type: "FETCH_START" }
+  | { type: "FETCH_SUCCESS"; payload: IAsyncComboboxOption[] }
+  | { type: "FETCH_ERROR" }
+  | { type: "CLEAR_RESULTS" }
+  | { type: "SELECT_ITEM"; payload: string }
+  | { type: "SET_SELECTED_LABEL"; payload: string };
+
+const initialState: TComboboxState = {
+  open: false,
+  searchQuery: "",
+  isLoading: false,
+  results: [],
+  selectedLabel: "",
+};
+
+function comboboxReducer(
+  state: TComboboxState,
+  action: TComboboxAction
+): TComboboxState {
+  switch (action.type) {
+    case "SET_OPEN":
+      return { ...state, open: action.payload };
+    case "SET_SEARCH":
+      return { ...state, searchQuery: action.payload };
+    case "FETCH_START":
+      return { ...state, isLoading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, isLoading: false, results: action.payload };
+    case "FETCH_ERROR":
+      return { ...state, isLoading: false, results: [] };
+    case "CLEAR_RESULTS":
+      return { ...state, results: [] };
+    case "SELECT_ITEM":
+      return {
+        ...state,
+        selectedLabel: action.payload,
+        open: false,
+        searchQuery: "",
+      };
+    case "SET_SELECTED_LABEL":
+      return { ...state, selectedLabel: action.payload };
+    default:
+      return state;
+  }
+}
+
 export function AsyncComboboxForm<T extends FieldValues>({
   control,
   name,
@@ -72,11 +129,8 @@ export function AsyncComboboxForm<T extends FieldValues>({
   className = "",
   onSelect,
 }: Readonly<IAsyncComboboxProps<T>>) {
-  const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<IAsyncComboboxOption[]>([]);
-  const [selectedLabel, setSelectedLabel] = useState<string>("");
+  const [{ open, searchQuery, isLoading, results, selectedLabel }, dispatch] =
+    useReducer(comboboxReducer, initialState);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const debouncedSearch = useDebounce(searchQuery, debounceTime);
@@ -93,24 +147,21 @@ export function AsyncComboboxForm<T extends FieldValues>({
 
       // Verifica se atende o mínimo de caracteres
       if (debouncedSearch.length < minSearchLength) {
-        setResults([]);
+        dispatch({ type: "CLEAR_RESULTS" });
         return;
       }
 
       abortControllerRef.current = new AbortController();
-      setIsLoading(true);
+      dispatch({ type: "FETCH_START" });
 
       try {
         const data = await fetchOptions(debouncedSearch);
-        setResults(data);
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (error) {
-        // Ignora erros de cancelamento
         if (error instanceof Error && error.name !== "AbortError") {
           console.error("Erro ao buscar dados:", error);
         }
-        setResults([]);
-      } finally {
-        setIsLoading(false);
+        dispatch({ type: "FETCH_ERROR" });
       }
     };
 
@@ -129,22 +180,26 @@ export function AsyncComboboxForm<T extends FieldValues>({
   // Atualiza o label baseado no valor do campo, results e fallbackOption
   useEffect(() => {
     if (!field.value) {
-      setSelectedLabel("");
+      dispatch({ type: "SET_SELECTED_LABEL", payload: "" });
       return;
     }
 
     const valueStr = String(field.value);
 
-    // Prioridade 1: Busca nos results atuais
     const foundInResults = results.find((item) => String(item.id) === valueStr);
     if (foundInResults) {
-      setSelectedLabel(foundInResults.label || foundInResults.name || "");
+      dispatch({
+        type: "SET_SELECTED_LABEL",
+        payload: foundInResults.label || foundInResults.name || "",
+      });
       return;
     }
 
-    // Prioridade 2: Busca no fallbackOption
     if (fallbackOption && String(fallbackOption.id) === valueStr) {
-      setSelectedLabel(fallbackOption.label || fallbackOption.name || "");
+      dispatch({
+        type: "SET_SELECTED_LABEL",
+        payload: fallbackOption.label || fallbackOption.name || "",
+      });
     }
   }, [field.value, results, fallbackOption]);
 
@@ -160,7 +215,10 @@ export function AsyncComboboxForm<T extends FieldValues>({
               {required && <span className="text-destructive ml-1">*</span>}
             </FormLabel>
           )}
-          <Popover open={open} onOpenChange={setOpen}>
+          <Popover
+            open={open}
+            onOpenChange={(val) => dispatch({ type: "SET_OPEN", payload: val })}
+          >
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
@@ -208,14 +266,16 @@ export function AsyncComboboxForm<T extends FieldValues>({
               </FormControl>
             </PopoverTrigger>
             <PopoverContent
-              className="w-[var(--radix-popover-trigger-width)] p-0"
+              className="w-[--radix-popover-trigger-width] p-0"
               align="start"
             >
               <Command shouldFilter={false}>
                 <CommandInput
                   placeholder={placeholder}
                   value={searchQuery}
-                  onValueChange={setSearchQuery}
+                  onValueChange={(val) =>
+                    dispatch({ type: "SET_SEARCH", payload: val })
+                  }
                 />
                 <CommandList>
                   {isLoading ? (
@@ -245,9 +305,10 @@ export function AsyncComboboxForm<T extends FieldValues>({
                                 ? Number(item.id)
                                 : item.id;
                             field.onChange(value);
-                            setSelectedLabel(item.label || item.name || "");
-                            setOpen(false);
-                            setSearchQuery("");
+                            dispatch({
+                              type: "SELECT_ITEM",
+                              payload: item.label || item.name || "",
+                            });
                             onSelect?.(item);
                           }}
                         >

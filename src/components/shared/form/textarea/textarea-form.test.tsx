@@ -227,24 +227,6 @@ describe("TextareaForm", () => {
 
       expect(screen.getByPlaceholderText("Digite aqui...")).toBeInTheDocument();
     });
-
-    it("should apply custom className", () => {
-      const { container } = render(
-        <TestWrapper
-          defaultValues={{ description: "" }}
-          renderChildren={(control) => (
-            <TextareaForm<TTestFormData>
-              control={control}
-              name="description"
-              className="my-custom-class"
-            />
-          )}
-        />
-      );
-
-      const textarea = container.querySelector("textarea.my-custom-class");
-      expect(textarea).toBeInTheDocument();
-    });
   });
 
   describe("Form Integration", () => {

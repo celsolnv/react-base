@@ -13,6 +13,8 @@ export interface ProfilePhotoCropperProps {
   minZoom?: number;
   /** Maximum zoom level */
   maxZoom?: number;
+  /** Callback when deleting an existing photo (URL string) */
+  onDeleteExistingFile?: () => Promise<void>;
 }
 
 export interface CropperDialogProps {

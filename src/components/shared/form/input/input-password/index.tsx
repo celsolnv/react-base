@@ -3,16 +3,16 @@ import { useFormContext, useFormState } from "react-hook-form";
 
 import { Eye, EyeOff } from "lucide-react";
 
+import { Button } from "@/ui/button";
 import {
-  Button,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
-} from "@/components/shadcn";
+} from "@/ui/form";
+import { Input } from "@/ui/input";
 
 interface IControlledPasswordInputProps {
   name?: string;
@@ -21,14 +21,14 @@ interface IControlledPasswordInputProps {
   placeholder?: string;
   disabled?: boolean;
   description?: string;
-  autoComplete?: string;
+  autoComplete?: React.ComponentProps<"input">["autoComplete"];
   className?: string;
   classNameInput?: string;
 }
 
 export const InputPasswordForm = ({
   name = "password",
-  label = "Senha",
+  label,
   required,
   placeholder = "Digite a senha",
   disabled,

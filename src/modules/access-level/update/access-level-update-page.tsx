@@ -4,7 +4,7 @@ import { Save } from "lucide-react";
 
 import { PageBottomNav } from "@/components/layouts/bottom-nav/page-bottom-nav";
 import { useBottomNav } from "@/components/layouts/bottom-nav/use-bottom-nav";
-import { HeaderList } from "@/components/shared";
+import { HeaderList } from "@/components/shared/header-list";
 import { cn } from "@/lib/utils";
 
 import { AccessLevelForm } from "../components";
@@ -35,11 +35,7 @@ export default function UpdateAccessLevelPage() {
             <div
               className={cn("space-y-6", isBottomNavActive ? "pb-24" : "pb-4")}
             >
-              <AccessLevelForm
-                control={form.control}
-                permissions={permissions}
-                errors={form.formState.errors}
-              />
+              <AccessLevelForm permissions={permissions} />
             </div>
           </div>
         </form>

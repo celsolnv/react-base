@@ -4,17 +4,20 @@ import { describe, expect, it, vi } from "vitest";
 import { BottomNav } from "./index";
 import type { BottomNavAction, BottomNavLeftAction } from "./types";
 
-// Mock do useSidebar
-vi.mock("@/components/shadcn", () => ({
+// Mock do useSidebar usado pelo BottomNav
+vi.mock("@/ui/sidebar", () => ({
+  useSidebar: () => ({
+    state: "expanded" as const,
+    isMobile: false,
+  }),
+}));
+
+vi.mock("@/ui/button", () => ({
   Button: ({ children, onClick, disabled, className }: any) => (
     <button onClick={onClick} disabled={disabled} className={className}>
       {children}
     </button>
   ),
-  useSidebar: () => ({
-    state: "expanded" as const,
-    isMobile: false,
-  }),
 }));
 
 describe("BottomNav Component", () => {

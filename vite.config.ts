@@ -3,6 +3,7 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import path from "node:path";
 import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default defineConfig(({ mode }) => ({
   logLevel: "info", // Alterado para 'info' para mais detalhes em desenvolvimento
@@ -21,15 +22,28 @@ export default defineConfig(({ mode }) => ({
     }),
     react(),
     tailwindcss(),
+    tsconfigPaths(),
   ].filter(Boolean),
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+    alias: [
+      {
+        find: /^@\/ui\/(.*)$/,
+        replacement: path.resolve(__dirname, "./src/components/ui/$1"),
+      },
+      {
+        find: "@",
+        replacement: path.resolve(__dirname, "./src"),
+      },
+      {
+        find: "moment/min/moment-with-locales",
+        replacement: "moment",
+      },
+    ],
   },
   test: {
     globals: true,
     environment: "jsdom",
+    pool: "threads",
     setupFiles: ["./src/test/setup.ts"],
 
     css: true, // Ignore CSS files in tests
@@ -43,7 +57,12 @@ export default defineConfig(({ mode }) => ({
       reportsDirectory: "coverage",
       all: true, // Incluindo todos os arquivos na cobertura
       include: ["src/**/*.{js,ts,jsx,tsx}"],
-      exclude: ["**/*.spec.{js,ts,jsx,tsx}"],
+      exclude: [
+        "**/*.spec.{js,ts,jsx,tsx}",
+        "src/routeTree.gen.ts",
+        "src/modules/template-base/**",
+        "src/app/**",
+      ],
     },
   },
 }));

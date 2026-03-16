@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import type { TUpdateUserSchema } from "../../constants/update-schema";
+import type { TUpdateUserSchema } from "../../update/schema";
 import * as api from "../api";
 import { userKeys } from "../queries";
 

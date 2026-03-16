@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import {
   ACTION_LABELS,
   type IGroupedPermissions,
-} from "@/lib/permissions-helper";
-import { cn } from "@/lib/utils";
+} from "@/modules/access-level/components/permissions-helper";
 
 interface IPermissionGroupProps {
   group: IGroupedPermissions;
@@ -23,32 +23,17 @@ export function PermissionGroup({
   onBulkChange,
   className,
 }: IPermissionGroupProps) {
-  const [isMasterChecked, setIsMasterChecked] = useState(false);
-  const [isIndeterminate, setIsIndeterminate] = useState(false);
-
-  // IDs das ações deste grupo (memoizado)
   const actionIds = useMemo(
     () => group.actions.map((a) => a.id),
     [group.actions]
   );
 
-  // Calcula o estado do checkbox mestre
-  useEffect(() => {
-    const selectedCount = actionIds.filter((id) =>
-      selectedIds.includes(id)
-    ).length;
-
-    if (selectedCount === 0) {
-      setIsMasterChecked(false);
-      setIsIndeterminate(false);
-    } else if (selectedCount === actionIds.length) {
-      setIsMasterChecked(true);
-      setIsIndeterminate(false);
-    } else {
-      setIsMasterChecked(false);
-      setIsIndeterminate(true);
-    }
-  }, [selectedIds, actionIds]);
+  const selectedCount = actionIds.filter((id) =>
+    selectedIds.includes(id)
+  ).length;
+  const isMasterChecked =
+    selectedCount > 0 && selectedCount === actionIds.length;
+  const isIndeterminate = selectedCount > 0 && selectedCount < actionIds.length;
 
   // Handler do checkbox mestre - usa bulk change se disponível
   const handleMasterChange = (checked: boolean) => {

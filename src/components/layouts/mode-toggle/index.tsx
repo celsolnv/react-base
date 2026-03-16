@@ -1,8 +1,8 @@
 import { Moon, Sun } from "lucide-react";
 
-import { Button } from "@/components/shadcn";
 import { useTheme } from "@/hooks/use-theme";
 import { cn } from "@/lib/utils";
+import { Button } from "@/ui/button";
 
 interface ModeToggleProps {
   className?: string;

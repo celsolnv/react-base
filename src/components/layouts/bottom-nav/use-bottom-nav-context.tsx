@@ -1,10 +1,8 @@
-"use client";
-
 import * as React from "react";
 
-import { BottomNav } from "./index";
 import type { BottomNavAction, BottomNavLeftAction } from "./types";
 import { BottomNavContext } from "./use-bottom-nav";
+import { BottomNav } from ".";
 
 // Re-export types for convenience
 export type { BottomNavAction, BottomNavLeftAction } from "./types";

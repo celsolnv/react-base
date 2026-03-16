@@ -1,12 +1,13 @@
 import * as React from "react";
 
 import { Link } from "@tanstack/react-router";
-import { LogOut, Shield } from "lucide-react";
+import { LogOut } from "lucide-react";
 
+import { useTheme } from "@/hooks/use-theme";
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback } from "@/ui/avatar";
+import { Button } from "@/ui/button";
 import {
-  Avatar,
-  AvatarFallback,
-  Button,
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -20,8 +21,8 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarSeparator,
-} from "@/components/shadcn";
-import { cn } from "@/lib/utils";
+  SidebarTrigger,
+} from "@/ui/sidebar";
 
 import { ModeToggle } from "../mode-toggle";
 import { useAppSidebar } from "./use-app-sidebar";
@@ -30,6 +31,7 @@ export function AppSidebar() {
   const { navigationData, isCollapsed, user, isActiveRoute, handleLogout } =
     useAppSidebar();
 
+  const { theme } = useTheme();
   return (
     <Sidebar
       collapsible="icon"
@@ -43,29 +45,29 @@ export function AppSidebar() {
         className={cn(
           "border-sidebar-border/50 h-20 border-b",
           "flex-row items-center gap-0 p-0",
-          isCollapsed ? "justify-center px-1" : "justify-start px-6"
+          isCollapsed ? "justify-center px-1" : "justify-between px-4"
         )}
       >
-        <div
-          className={cn(
-            "flex items-center",
-            isCollapsed ? "justify-center" : "gap-3"
-          )}
-        >
-          <div className="bg-primary text-primary-foreground shadow-glow flex size-8 shrink-0 items-center justify-center rounded">
-            <Shield className="size-5" />
-          </div>
-          {!isCollapsed && (
-            <div className="flex flex-col">
-              <span className="text-foreground text-sm font-bold tracking-wide">
-                Nome do Sistema
-              </span>
-              <span className="text-muted-foreground text-[10px] tracking-widest uppercase">
-                Descrição do Sistema
-              </span>
-            </div>
-          )}
-        </div>
+        {!isCollapsed ? (
+          <>
+            <Link to="/" className="flex items-center">
+              <img
+                src={
+                  theme === "light"
+                    ? "/logo/logo-full-dark.svg"
+                    : "/logo/logo-full-light.svg"
+                }
+                alt="Classe A"
+                width={140}
+                height={40}
+                className="h-8 w-auto"
+              />
+            </Link>
+            <SidebarTrigger className="text-muted-foreground hover:text-foreground size-8" />
+          </>
+        ) : (
+          <SidebarTrigger className="text-muted-foreground hover:text-foreground size-8" />
+        )}
       </SidebarHeader>
 
       {/* Navigation Content */}

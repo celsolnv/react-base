@@ -1,6 +1,7 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit } from "lucide-react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
@@ -53,6 +54,31 @@ vi.mock("@/utils/formatters/date", () => ({
     }
   }),
 }));
+
+// Mock do usePermission
+vi.mock("@/hooks/use-permission", () => ({
+  usePermission: () => ({
+    can: vi.fn(() => true), // Por padrão, permite todas as permissões
+  }),
+}));
+
+// Helper para criar QueryClient para testes
+const createTestQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
+// Helper para wrapper com QueryClientProvider
+const TestWrapper = ({ children }: { children: React.ReactNode }) => {
+  const queryClient = createTestQueryClient();
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+};
 
 // Tipo de dados de exemplo
 interface ITestData {
@@ -539,7 +565,11 @@ describe("Column Renderers", () => {
       ];
 
       const result = renderActionsCell(mockRow, actions);
-      render(<>{result}</>);
+      render(
+        <TestWrapper>
+          <>{result}</>
+        </TestWrapper>
+      );
 
       expect(screen.getByText("Abrir menu")).toBeInTheDocument();
     });
@@ -558,7 +588,11 @@ describe("Column Renderers", () => {
       ];
 
       const result = renderActionsCell(mockRow, actions);
-      render(<>{result}</>);
+      render(
+        <TestWrapper>
+          <>{result}</>
+        </TestWrapper>
+      );
 
       const triggerButton = screen.getByText("Abrir menu").closest("button");
       if (triggerButton) {
@@ -580,7 +614,11 @@ describe("Column Renderers", () => {
       ];
 
       const result = renderActionsCell(mockRow, actions);
-      render(<>{result}</>);
+      render(
+        <TestWrapper>
+          <>{result}</>
+        </TestWrapper>
+      );
 
       const triggerButton = screen.getByText("Abrir menu").closest("button");
       if (triggerButton) {
@@ -604,7 +642,11 @@ describe("Column Renderers", () => {
       ];
 
       const result = renderActionsCell(mockRow, actions);
-      render(<>{result}</>);
+      render(
+        <TestWrapper>
+          <>{result}</>
+        </TestWrapper>
+      );
 
       const triggerButton = screen.getByText("Abrir menu").closest("button");
       if (triggerButton) {
@@ -629,7 +671,11 @@ describe("Column Renderers", () => {
       ];
 
       const result = renderActionsCell(mockRow, actions);
-      render(<>{result}</>);
+      render(
+        <TestWrapper>
+          <>{result}</>
+        </TestWrapper>
+      );
 
       const triggerButton = screen.getByText("Abrir menu").closest("button");
       if (triggerButton) {
@@ -654,7 +700,11 @@ describe("Column Renderers", () => {
       ];
 
       const result = renderActionsCell(mockRow, actions);
-      render(<>{result}</>);
+      render(
+        <TestWrapper>
+          <>{result}</>
+        </TestWrapper>
+      );
 
       const triggerButton = screen.getByText("Abrir menu").closest("button");
       if (triggerButton) {
@@ -675,12 +725,28 @@ describe("Column Renderers", () => {
       ];
 
       const result = renderActionsCell(mockRow, actions);
-      expect(result).toBeNull();
+      const { container } = render(
+        <TestWrapper>
+          <>{result}</>
+        </TestWrapper>
+      );
+
+      // Quando todas as ações estão ocultas, o componente retorna null internamente
+      // então não deve haver nenhum botão renderizado
+      expect(container.querySelector("button")).not.toBeInTheDocument();
     });
 
     it("should return null when actions array is empty", () => {
       const result = renderActionsCell(mockRow, []);
-      expect(result).toBeNull();
+      const { container } = render(
+        <TestWrapper>
+          <>{result}</>
+        </TestWrapper>
+      );
+
+      // Quando o array de ações está vazio, o componente retorna null internamente
+      // então não deve haver nenhum botão renderizado
+      expect(container.querySelector("button")).not.toBeInTheDocument();
     });
 
     it("should render separator before action", async () => {
@@ -698,7 +764,11 @@ describe("Column Renderers", () => {
       ];
 
       const result = renderActionsCell(mockRow, actions);
-      const { container } = render(<>{result}</>);
+      const { container } = render(
+        <TestWrapper>
+          <>{result}</>
+        </TestWrapper>
+      );
 
       const triggerButton = screen.getByText("Abrir menu").closest("button");
       if (triggerButton) {
@@ -735,7 +805,11 @@ describe("Column Renderers", () => {
       ];
 
       const result = renderActionsCell(mockRow, actions);
-      render(<>{result}</>);
+      render(
+        <TestWrapper>
+          <>{result}</>
+        </TestWrapper>
+      );
 
       const triggerButton = screen.getByText("Abrir menu").closest("button");
       if (triggerButton) {

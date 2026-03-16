@@ -5,16 +5,19 @@ import { useBottomNav } from "./use-bottom-nav";
 import { BottomNavProvider } from "./use-bottom-nav-context";
 
 // Mock do useSidebar usado pelo BottomNav
-vi.mock("@/components/shadcn", () => ({
+vi.mock("@/ui/sidebar", () => ({
+  useSidebar: () => ({
+    state: "expanded" as const,
+    isMobile: false,
+  }),
+}));
+
+vi.mock("@/ui/button", () => ({
   Button: ({ children, onClick, disabled, className }: any) => (
     <button onClick={onClick} disabled={disabled} className={className}>
       {children}
     </button>
   ),
-  useSidebar: () => ({
-    state: "expanded" as const,
-    isMobile: false,
-  }),
 }));
 
 // Componente de teste que usa o hook
@@ -93,7 +96,9 @@ describe("BottomNavProvider and useBottomNav", () => {
     const setButton = screen.getByTestId("set-left-action");
     setButton.click();
 
-    expect(screen.getByTestId("is-active")).toHaveTextContent("active");
+    await waitFor(() => {
+      expect(screen.getByTestId("is-active")).toHaveTextContent("active");
+    });
   });
 
   it("updates isActive when rightActions are set", async () => {
@@ -106,7 +111,9 @@ describe("BottomNavProvider and useBottomNav", () => {
     const setButton = screen.getByTestId("set-right-actions");
     setButton.click();
 
-    expect(screen.getByTestId("is-active")).toHaveTextContent("active");
+    await waitFor(() => {
+      expect(screen.getByTestId("is-active")).toHaveTextContent("active");
+    });
   });
 
   it("updates isActive to false when nav is cleared", async () => {
@@ -118,11 +125,15 @@ describe("BottomNavProvider and useBottomNav", () => {
 
     // Primeiro ativa
     screen.getByTestId("set-left-action").click();
-    expect(screen.getByTestId("is-active")).toHaveTextContent("active");
+    await waitFor(() => {
+      expect(screen.getByTestId("is-active")).toHaveTextContent("active");
+    });
 
     // Depois limpa
     screen.getByTestId("clear-nav").click();
-    expect(screen.getByTestId("is-active")).toHaveTextContent("inactive");
+    await waitFor(() => {
+      expect(screen.getByTestId("is-active")).toHaveTextContent("inactive");
+    });
   });
 
   it("renders BottomNav component when actions are set", async () => {

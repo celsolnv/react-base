@@ -24,3 +24,11 @@ export const downloadFile = async (path: string, filename: string) => {
   // Limpa o objeto URL após o download
   window.URL.revokeObjectURL(url);
 };
+
+export function getFileUrl(path: string): string;
+export function getFileUrl(path: null | undefined): null;
+export function getFileUrl(path?: string | null): string | null;
+export function getFileUrl(path?: string | null): string | null {
+  if (!path) return null;
+  return `${import.meta.env.VITE_FILE_URL}/${path}`;
+}

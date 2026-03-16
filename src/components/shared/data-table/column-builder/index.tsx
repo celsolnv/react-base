@@ -1,7 +1,7 @@
 import type { ColumnDef } from "@tanstack/react-table";
 
+import { ActionsColumnCell } from "./actions-column-cell";
 import {
-  renderActionsCell,
   renderBadgeCell,
   renderBooleanCell,
   renderCurrencyCell,
@@ -10,20 +10,46 @@ import {
 } from "./renders";
 import type { ColumnConfig, TableAction } from "./types";
 
+// Re-exporta tipos para facilitar imports
+export type { ColumnConfig, TableAction } from "./types";
+
 type TPrimitiveValue = string | number | boolean | bigint;
+
+/**
+ * Função utilitária para obter valor de um objeto usando path aninhado
+ * Exemplo: getNestedValue(obj, "user.name") => obj.user.name
+ */
+function getNestedValue<T>(obj: T, path: string): unknown {
+  const keys = path.split(".");
+  let value: unknown = obj;
+
+  for (const key of keys) {
+    if (value === null || value === undefined) {
+      return undefined;
+    }
+    value = (value as Record<string, unknown>)[key];
+  }
+
+  return value;
+}
 
 export function buildColumns<TData>(
   config: ColumnConfig<TData>[],
   actions?: TableAction<TData>[]
 ): ColumnDef<TData>[] {
   const columns: ColumnDef<TData>[] = config.map((col) => {
+    const accessorKey = col.accessorKey as string;
+    const isNestedPath = accessorKey.includes(".");
+
     const baseColumn: ColumnDef<TData> = {
-      accessorKey: col.accessorKey as string,
+      accessorKey: isNestedPath ? accessorKey.replace(/\./g, "_") : accessorKey,
       header: col.header,
     };
 
     baseColumn.cell = ({ row }) => {
-      const value = row.getValue(col.accessorKey as string);
+      const value = isNestedPath
+        ? getNestedValue(row.original, accessorKey)
+        : row.getValue(accessorKey);
 
       switch (col.type) {
         case "text":
@@ -64,9 +90,7 @@ export function buildColumns<TData>(
       id: "actions",
       header: () => <div className="px-4 text-right">Ações</div>,
       cell: ({ row }) => (
-        <div className="px-4 text-right">
-          {renderActionsCell(row.original, actions)}
-        </div>
+        <ActionsColumnCell row={row.original} actions={actions} />
       ),
       enableSorting: false,
       enableHiding: false,

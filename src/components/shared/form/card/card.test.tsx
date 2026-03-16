@@ -8,7 +8,7 @@ import * as z from "zod";
 
 import { Form } from "@/components/ui/form";
 
-import { CardForm } from "./card";
+import { CardForm } from "./card-form";
 
 // Mock do CardFormSkeleton
 vi.mock("./card-form-skeleton", () => ({

@@ -8,7 +8,6 @@ export interface IUser {
   createdAt: string;
   name: string;
   email: string;
-  active: boolean;
   need_reset: boolean;
   confirmed: boolean;
   confirmed_date: string;
@@ -16,30 +15,12 @@ export interface IUser {
   confirm_date: string;
   access_profile_id: string;
   birth_date: string;
-  commission_periodicity: string;
-  commission_type: string;
-  commission_value: string;
-  commission_value_type: string;
-  document: string;
-  document_type: string;
-  filial: string;
-  hiring_date: string;
   is_active: boolean;
   phone: string;
-  job_role_id: string;
-  sector_id: string;
-  salary: string;
-  user_addresses: IUserAddresses;
   access_profile: IAccessProfile;
-  job_role: IJobRole;
-  sector: ISector;
-  benefits?: IBenefit[];
-  user_vacation_histories?: IUserVacationHistory[];
-  user_commission_histories?: IUserCommissionHistory[];
-  user_promotion_histories?: IUserPromotionHistory[];
-  user_professional_histories?: IUserProfessionalHistory[];
-  user_attachments?: IUserAttachment[];
   password?: string;
+  permissions?: string[];
+  profile_picture?: string;
 }
 export interface IUserToken {
   id: string;
