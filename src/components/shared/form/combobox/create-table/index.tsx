@@ -1,6 +1,5 @@
-import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
+import { Check, ChevronsUpDown, Plus } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import {
   Command,
   CommandEmpty,
@@ -16,14 +15,11 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
+import { TriggerContent } from "./trigger-content";
 import {
-  type IOption,
   type TCreatableSelectProps,
   useCreatableSelect,
 } from "./use-creatable-select";
-
-export type Option = IOption;
-export type CreatableSelectProps = TCreatableSelectProps;
 
 export function CreatableSelect(props: TCreatableSelectProps) {
   const {
@@ -44,66 +40,6 @@ export function CreatableSelect(props: TCreatableSelectProps) {
 
   const { disabled = false, className, id } = props;
 
-  const renderTriggerContent = () => {
-    if (multiple) {
-      const vals = value as IOption[];
-      if (vals.length === 0) {
-        return <span className="text-muted-foreground">{placeholder}</span>;
-      }
-      return (
-        <div className="flex flex-wrap gap-1.5">
-          {vals.map((opt) => (
-            <Badge key={opt.value} variant="secondary" className="gap-1 pr-1">
-              {opt.label}
-              <button
-                type="button"
-                aria-label={`Remover ${opt.label}`}
-                className="hover:bg-muted-foreground/20 inline-flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0.5"
-                onPointerDown={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleRemove(opt.value);
-                }}
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </Badge>
-          ))}
-        </div>
-      );
-    }
-
-    const single = value as IOption | null;
-    if (!single) {
-      return <span className="text-muted-foreground">{placeholder}</span>;
-    }
-    return (
-      <div className="flex items-center gap-2">
-        <span className="truncate">{single.label}</span>
-        <button
-          type="button"
-          aria-label="Limpar seleção"
-          className="hover:bg-muted-foreground/20 ml-auto inline-flex cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0.5"
-          onPointerDown={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleRemove(single.value);
-          }}
-        >
-          <X className="h-3 w-3" />
-        </button>
-      </div>
-    );
-  };
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild disabled={disabled}>
@@ -118,7 +54,14 @@ export function CreatableSelect(props: TCreatableSelectProps) {
             className
           )}
         >
-          <div className="flex-1 text-left">{renderTriggerContent()}</div>
+          <div className="flex-1 text-left">
+            <TriggerContent
+              value={value}
+              multiple={multiple}
+              placeholder={placeholder}
+              handleRemove={handleRemove}
+            />
+          </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </button>
       </PopoverTrigger>

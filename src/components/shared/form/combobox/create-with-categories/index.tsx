@@ -18,18 +18,18 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-export interface CategoryOption {
+interface ICategoryOption {
   value: string;
   label: string;
 }
 
-export interface Category {
+interface ICategory {
   name: string;
-  options: CategoryOption[];
+  options: ICategoryOption[];
 }
 
-interface FilterableGroupSelectProps {
-  categories: Category[];
+interface IFilterableGroupSelectProps {
+  categories: ICategory[];
   value?: string;
   onValueChange?: (value: string) => void;
   placeholder?: string;
@@ -48,7 +48,7 @@ export function SelectGroup({
   emptyMessage = "Nenhum resultado encontrado.",
   className,
   id,
-}: Readonly<FilterableGroupSelectProps>) {
+}: Readonly<IFilterableGroupSelectProps>) {
   const [open, setOpen] = React.useState(false);
 
   const selectedLabel = React.useMemo(() => {
@@ -66,6 +66,7 @@ export function SelectGroup({
           id={id}
           variant="outline"
           role="combobox"
+          aria-controls={open ? "combobox-list" : undefined}
           aria-expanded={open}
           className={cn("w-full justify-between font-normal", className)}
         >
