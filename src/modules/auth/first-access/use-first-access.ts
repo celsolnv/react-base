@@ -3,22 +3,25 @@ import { useForm, useWatch } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import * as api from "@/modules/auth/http/api";
 import { getPasswordRequirements } from "@/utils/validate";
 
-import { useAuth } from "../auth/hooks/use-auth";
-import * as api from "./api";
-import { resetPasswordSchema, type TResetPasswordSchema } from "./schema";
+import { useAuth } from "../hooks/use-auth";
+import {
+  firstAccessSchema,
+  type TFirstAccessSchema,
+} from "./first-access-schema";
 
-export const useResetPassword = (code: string) => {
-  const hookform = useForm<TResetPasswordSchema>({
-    resolver: zodResolver(resetPasswordSchema),
+export const useFirstAccess = (code: string) => {
+  const hookform = useForm<TFirstAccessSchema>({
+    resolver: zodResolver(firstAccessSchema),
   });
 
   const { signIn } = useAuth();
 
-  const handleSubmit = async (data: TResetPasswordSchema) => {
+  const handleSubmit = async (data: TFirstAccessSchema) => {
     try {
-      const res = await api.reset(data, code);
+      const res = await api.firstAccess({ ...data, code });
       signIn(res);
     } catch (error) {
       console.error(error);

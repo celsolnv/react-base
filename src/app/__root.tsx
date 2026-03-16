@@ -1,16 +1,16 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 
 import { GlobalErrorComponent } from "@/components/layouts/global-error";
 import NotFound from "@/components/layouts/not-found";
+import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { queryClient } from "@/lib/query-client";
-import { authQueries } from "@/modules/auth/queries/auth-queries";
+import { authQueries } from "@/modules/auth/http/queries/auth-queries";
 import { useAuthStore } from "@/modules/auth/store/auth-store";
 import { ThemeProvider } from "@/providers/theme";
+import type { IUser } from "@/types";
 
 import "@fontsource-variable/manrope";
 
@@ -19,19 +19,21 @@ export interface IRouterContext {
     isAuthenticated: boolean;
   };
   queryClient: QueryClient;
+  user: IUser | null;
 }
 
 const RootLayout = () => {
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
       <ReactQueryDevtools initialIsOpen={false} />
       <TooltipProvider>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <Outlet />
           <Toaster position="bottom-right" />
+          <ConfirmDialog />
         </ThemeProvider>
       </TooltipProvider>
-    </QueryClientProvider>
+    </>
   );
 };
 

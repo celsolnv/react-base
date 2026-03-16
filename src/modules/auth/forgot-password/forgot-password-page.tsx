@@ -1,12 +1,12 @@
-"use client";
-
 import { FormProvider } from "react-hook-form";
 
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
-import { Button, Card, CardContent, CardFooter } from "@/components/shadcn";
-import { ButtonForm, InputForm } from "@/components/shared";
+import { ButtonForm } from "@/components/shared/form/button";
+import { InputForm } from "@/components/shared/form/input/input-form";
+import { Button } from "@/ui/button";
+import { Card, CardContent, CardFooter } from "@/ui/card";
 
 import { useForgotPassword } from "./use-forgot-password";
 

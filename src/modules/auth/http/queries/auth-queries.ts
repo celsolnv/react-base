@@ -1,10 +1,11 @@
 import { queryOptions } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 import api from "@/lib/axios";
 import type { IUser } from "@/types";
 
 async function fetchUserProfile() {
-  const { data } = await api.get<{ data: IUser }>("/private/user/me");
+  const { data } = await api.get<{ data: IUser }>("/private/staff/me");
   return data?.data;
 }
 
@@ -16,7 +17,14 @@ export const authQueries = {
       queryFn: fetchUserProfile,
       // Só tenta buscar se tivermos um token (previne erro 401 desnecessário)
       enabled: !!localStorage.getItem("auth-storage"), // Leitura rápida ou checar store
-      retry: false, // Se falhar (401), não fica tentando de novo
+      retry: (_failureCount, error) => {
+        // Se for erro 401 (não autorizado), não tenta novamente
+        if (error instanceof AxiosError && error.response?.status === 401) {
+          return false;
+        }
+        // Para qualquer outro erro, tenta novamente (padrão: 3 tentativas)
+        return true;
+      },
       staleTime: 1000 * 60 * 30, // 30min
     }),
 };

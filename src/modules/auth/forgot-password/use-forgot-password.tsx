@@ -2,7 +2,8 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import * as api from "./api";
+import * as api from "@/modules/auth/http/api";
+
 import { forgotPasswordSchema, type TForgotPasswordSchema } from "./schema";
 
 export function useForgotPassword() {

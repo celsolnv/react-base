@@ -3,7 +3,7 @@ import { useNavigate, useRouter } from "@tanstack/react-router";
 
 import type { IUser } from "@/types";
 
-import { authQueries } from "../queries/auth-queries";
+import { authQueries } from "../http/queries/auth-queries";
 import { useAuthStore } from "../store/auth-store";
 
 export function useAuth() {

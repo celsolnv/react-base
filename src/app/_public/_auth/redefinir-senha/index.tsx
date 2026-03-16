@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
-import { InvalidLinkError } from "@/modules/reset-password/components/invalid-link-error";
-import * as queries from "@/modules/reset-password/queries";
-import { ResetPasswordPage } from "@/modules/reset-password/reset-password-page";
+import { InvalidLinkError } from "@/modules/auth/components/invalid-link-error";
+import * as queries from "@/modules/auth/http/queries/validate-code";
+import { ResetPasswordPage } from "@/modules/auth/reset-password/reset-password-page";
 
 const schema = z.object({
   code: z.string().min(1),
@@ -14,7 +14,7 @@ function ResetPasswordRoute() {
   return <ResetPasswordPage code={code} />;
 }
 
-export const Route = createFileRoute("/_public/_auth/reset-password/")({
+export const Route = createFileRoute("/_public/_auth/redefinir-senha/")({
   validateSearch: (search) => schema.parse(search),
   loaderDeps: ({ search: { code } }) => ({ code }),
   loader: async ({ context, deps: { code } }) => {

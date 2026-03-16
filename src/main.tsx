@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
+import * as Sentry from "@sentry/browser";
 import { createRouter } from "@tanstack/react-router";
 
 import type { IRouterContext } from "./app/__root";
@@ -10,6 +11,11 @@ import { App } from "./App";
 import { routeTree } from "./routeTree.gen";
 
 import "./global.css";
+
+Sentry.init({
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  sendDefaultPii: true,
+});
 
 export const router = createRouter({
   routeTree,

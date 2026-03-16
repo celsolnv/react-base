@@ -2,14 +2,14 @@ import { z } from "zod";
 
 import * as f from "@/constants/schemas";
 
-export const resetPasswordSchema = z
+export const firstAccessSchema = z
   .object({
-    password: f.password(true),
+    password: f.password,
     password_confirm: f.string("confirmar senha"),
   })
   .refine((data) => data.password === data.password_confirm, {
     message: "As senhas não coincidem",
-    path: ["confirmPassword"],
+    path: ["password_confirm"],
   });
 
-export type TResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
+export type TFirstAccessSchema = z.infer<typeof firstAccessSchema>;

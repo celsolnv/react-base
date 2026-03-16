@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { CustomError } from "@/lib/axios/handle";
 import { useAuth } from "@/modules/auth/hooks/use-auth";
+import * as api from "@/modules/auth/http/api";
 
-import * as api from "./api";
 import { loginSchema, type TLoginSchema } from "./schema";
 
 export const useLogin = () => {

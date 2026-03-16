@@ -2,9 +2,11 @@ import { FormProvider } from "react-hook-form";
 
 import { Link } from "@tanstack/react-router";
 
-import { Card, CardContent, CardFooter } from "@/components/shadcn";
-import { ButtonForm, InputForm, InputPasswordForm } from "@/components/shared";
-import { useLogin } from "@/modules/login/use-login";
+import { ButtonForm } from "@/components/shared/form/button";
+import { InputForm } from "@/components/shared/form/input/input-form";
+import { InputPasswordForm } from "@/components/shared/form/input/input-password";
+import { useLogin } from "@/modules/auth/login/use-login";
+import { Card, CardContent, CardFooter } from "@/ui/card";
 
 export function LoginPage() {
   const { hookform, handleSubmit } = useLogin();
@@ -24,7 +26,6 @@ export function LoginPage() {
             />
 
             <InputPasswordForm
-              control={hookform.control}
               name="password"
               label="Senha"
               placeholder="********"
