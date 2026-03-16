@@ -22,8 +22,6 @@ export function ConfirmDialog() {
     handleConfirm,
     handleCancel,
   } = useConfirmStore();
-  console.log(variant, "VARIANT");
-  console.log(textConfirm, "textConfirm");
   return (
     <AlertDialog open={isOpen} onOpenChange={(open) => !open && handleCancel()}>
       <AlertDialogContent className="dark:bg-[#111111]">
