@@ -29,20 +29,21 @@ export const useCreateAccessLevel = () => {
 
   const isSubmitting = form.formState.isSubmitting;
 
-  const handleCancel = () => {
+  const handleBack = () => {
     navigate({
       to: "/nivel-acesso",
-      search: { limit: 10, page: 1, search: null },
+      search: { limit: 10, page: 1, search: "", is_active: "all" },
     });
+  };
+
+  const handleCancel = () => {
+    handleBack();
   };
 
   const handleSubmit = async (data: TCreateAccessLevelSchema) => {
     createMutation.mutate(data, {
       onSuccess: () => {
-        navigate({
-          to: "/nivel-acesso",
-          search: { limit: 10, page: 1, search: null },
-        });
+        handleBack();
       },
     });
   };

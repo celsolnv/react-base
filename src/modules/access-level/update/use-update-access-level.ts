@@ -43,25 +43,31 @@ export const useUpdateAccessLevel = () => {
 
   const isSubmitting = form.formState.isSubmitting || updateMutation.isPending;
 
-  const handleCancel = () => {
+  const handleBack = () => {
     navigate({
       to: "/nivel-acesso",
-      search: { limit: 10, page: 1, search: null },
+      search: { limit: 10, page: 1, search: "", is_active: "all" },
     });
+  };
+
+  const handleCancel = () => {
+    handleBack();
   };
 
   const handleSubmit = async (data: TUpdateAccessLevelSchema) => {
     if (!accessProfile?.id) return;
 
-    await updateMutation.mutateAsync({
-      data,
-      id: accessProfile.id,
-    });
-
-    navigate({
-      to: "/nivel-acesso",
-      search: { limit: 10, page: 1, search: null },
-    });
+    await updateMutation.mutateAsync(
+      {
+        data,
+        id: accessProfile.id,
+      },
+      {
+        onSuccess: () => {
+          handleBack();
+        },
+      }
+    );
   };
 
   return {

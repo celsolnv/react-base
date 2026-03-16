@@ -1,27 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, LogOut, Menu, Settings, User } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback } from "@/ui/avatar";
+import { Button } from "@/ui/button";
 import {
-  Avatar,
-  AvatarFallback,
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  Separator,
-  SidebarTrigger,
-} from "@/components/shadcn";
-import { cn } from "@/lib/utils";
+} from "@/ui/dropdown-menu";
+import { Separator } from "@/ui/separator";
 
 import { useTopBar } from "./use-top-bar";
 
-interface TopBarProps {
+interface ITopBarProps {
   className?: string;
 }
 
-export function TopBar({ className }: Readonly<TopBarProps>) {
+export function TopBar({ className }: Readonly<ITopBarProps>) {
   const {
     breadcrumbs,
     isMobile,
@@ -54,7 +52,7 @@ export function TopBar({ className }: Readonly<TopBarProps>) {
         )}
 
         {/* Desktop Sidebar Toggle */}
-        <SidebarTrigger className="hidden md:flex" />
+        {/* <SidebarTrigger className="hidden md:flex" /> */}
 
         <Separator orientation="vertical" className="hidden h-6 md:block" />
 

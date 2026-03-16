@@ -3,15 +3,15 @@ import Cropper from "react-easy-crop";
 
 import { Check, Loader2, X, ZoomIn, ZoomOut } from "lucide-react";
 
+import { Button } from "@/ui/button";
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  Slider,
-} from "@/components/shadcn";
+} from "@/ui/dialog";
+import { Slider } from "@/ui/slider";
 
 import type { CropperDialogProps } from "./types";
 import { useImageCropper } from "./use-image-cropper";

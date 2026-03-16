@@ -3,11 +3,14 @@ import { useFormContext } from "react-hook-form";
 
 import { MapPin } from "lucide-react";
 
-import { CardForm, InputForm, SelectForm } from "@/components/shared";
 import { countriesOptions } from "@/constants/countries";
 import { ufOptions } from "@/constants/ufs";
 import { getCep } from "@/lib/axios/global/cep";
 import masks from "@/utils/masks";
+
+import { CardForm } from "../card/card-form";
+import { InputForm } from "../input/input-form";
+import { SelectForm } from "../select/select-form";
 
 interface IAddressFormProps {
   prefix?: string;
@@ -20,12 +23,18 @@ export function AddressForm({ prefix = "" }: Readonly<IAddressFormProps>) {
 
     if (cepRegex.test(cep)) {
       const setFields = async () => {
-        const data = await getCep(cep);
-        if (data?.erro) return;
-        form.setValue(`${prefix}city`, data.localidade ?? "");
-        form.setValue(`${prefix}street`, data.logradouro ?? "");
-        form.setValue(`${prefix}neighborhood`, data.bairro ?? "");
-        form.setValue(`${prefix}state`, data.uf ?? "");
+        try {
+          const data = await getCep(cep);
+          if (data?.erro) return;
+          form.setValue(`${prefix}city`, data.localidade ?? "");
+          form.setValue(`${prefix}street`, data.logradouro ?? "");
+          form.setValue(`${prefix}neighborhood`, data.bairro ?? "");
+          form.setValue(`${prefix}state`, data.uf ?? "");
+        } catch (error) {
+          // Silenciosamente ignora erros da API de CEP
+          // para não quebrar a experiência do usuário
+          console.error("Erro ao buscar CEP:", error);
+        }
       };
       setFields();
     }
@@ -62,6 +71,7 @@ export function AddressForm({ prefix = "" }: Readonly<IAddressFormProps>) {
         name={`${prefix}number`}
         placeholder="Número"
         className="col-span-12 sm:col-span-2"
+        required
       />
       <InputForm
         control={form.control}

@@ -18,11 +18,24 @@ vi.mock("@tanstack/react-router", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-// Mock do useSidebar
+// Mock do useSidebar (use-top-bar importa de @/components/ui/sidebar)
 const mockToggleSidebar = vi.fn();
 let mockIsMobile = false;
 
 vi.mock("@/components/ui/sidebar", () => ({
+  useSidebar: () => ({
+    isMobile: mockIsMobile,
+    toggleSidebar: mockToggleSidebar,
+  }),
+  SidebarTrigger: ({ className }: any) => (
+    <button className={className} data-testid="sidebar-trigger">
+      Toggle
+    </button>
+  ),
+}));
+
+// TopBar importa de @/ui/* (alias para src/components/ui/*)
+vi.mock("@/ui/sidebar", () => ({
   useSidebar: () => ({
     isMobile: mockIsMobile,
     toggleSidebar: mockToggleSidebar,
@@ -60,8 +73,8 @@ vi.mock("@/utils/text", () => ({
   },
 }));
 
-// Mock dos componentes do shadcn
-vi.mock("@/components/shadcn", () => ({
+// Mock dos componentes UI usados pelo TopBar (@/ui/* -> src/components/ui/*)
+vi.mock("@/ui/avatar", () => ({
   Avatar: ({ children, className }: any) => (
     <div className={className} data-testid="avatar">
       {children}
@@ -72,11 +85,17 @@ vi.mock("@/components/shadcn", () => ({
       {children}
     </div>
   ),
+}));
+
+vi.mock("@/ui/button", () => ({
   Button: ({ children, onClick, className, "aria-label": ariaLabel }: any) => (
     <button onClick={onClick} className={className} aria-label={ariaLabel}>
       {children}
     </button>
   ),
+}));
+
+vi.mock("@/ui/dropdown-menu", () => ({
   DropdownMenu: ({ children }: any) => (
     <div data-testid="dropdown-menu">{children}</div>
   ),
@@ -96,17 +115,15 @@ vi.mock("@/components/shadcn", () => ({
   DropdownMenuTrigger: ({ children, asChild }: any) => (
     <div data-testid="dropdown-trigger">{children}</div>
   ),
+}));
+
+vi.mock("@/ui/separator", () => ({
   Separator: ({ orientation, className }: any) => (
     <div
       className={className}
       data-testid="separator"
       data-orientation={orientation}
     />
-  ),
-  SidebarTrigger: ({ className }: any) => (
-    <button className={className} data-testid="sidebar-trigger">
-      Toggle
-    </button>
   ),
 }));
 
@@ -214,11 +231,10 @@ describe("TopBar Component", () => {
     expect(mockToggleSidebar).toHaveBeenCalledTimes(1);
   });
 
-  it("renders sidebar trigger for desktop", () => {
+  it("does not render sidebar trigger (feature commented out in TopBar)", () => {
     render(<TopBar />);
 
-    const sidebarTrigger = screen.getByTestId("sidebar-trigger");
-    expect(sidebarTrigger).toHaveClass("hidden", "md:flex");
+    expect(screen.queryByTestId("sidebar-trigger")).not.toBeInTheDocument();
   });
 
   it("renders settings button for desktop", () => {

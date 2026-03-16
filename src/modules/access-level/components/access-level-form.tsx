@@ -1,32 +1,32 @@
-import type { Control } from "react-hook-form";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 import { Building2 } from "lucide-react";
 
+import { InputForm } from "@/components/shared/form/input/input-form";
+import { TextareaForm } from "@/components/shared/form/textarea/textarea-form";
+import type { IPermission } from "@/modules/access-level/components/permissions-helper";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-  FormMessage,
-} from "@/components/shadcn";
-import { InputForm, TextareaForm } from "@/components/shared";
-import type { IPermission } from "@/lib/permissions-helper";
+} from "@/ui/card";
+import { FormMessage } from "@/ui/form";
 
 import { PermissionsSelector } from "./permissions-selector";
 
 interface IAccessLevelFormProps {
-  readonly control: Control;
   readonly permissions: IPermission[];
   readonly isLoading?: boolean;
 }
 
 export function AccessLevelForm({
-  control,
   permissions,
   isLoading = false,
 }: IAccessLevelFormProps) {
+  const form = useFormContext();
+
   return (
     <div className="space-y-6">
       {/* Dados do Perfil */}
@@ -49,7 +49,6 @@ export function AccessLevelForm({
         </CardHeader>
         <CardContent className="space-y-6 pt-6">
           <InputForm
-            control={control}
             name="name"
             label="Nome do Perfil"
             placeholder="Ex: Gerente de Frota"
@@ -58,7 +57,6 @@ export function AccessLevelForm({
           />
 
           <TextareaForm
-            control={control}
             name="note"
             label="Descrição"
             placeholder="Ex: Acesso completo ao módulo de frota..."
@@ -69,7 +67,7 @@ export function AccessLevelForm({
 
       {/* Seleção de Permissões - Integrado com React Hook Form */}
       <Controller
-        control={control}
+        control={form.control}
         name="permissions"
         render={({ field, fieldState }) => (
           <div className="space-y-2">

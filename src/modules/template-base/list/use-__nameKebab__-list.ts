@@ -5,7 +5,7 @@ import { getRouteApi } from "@tanstack/react-router";
 import type { PaginationState } from "@tanstack/react-table";
 import { toast } from "sonner";
 
-import { useDataTable } from "@/components/shared";
+import { useDataTable } from "@/components/shared/data-table/use-data-table";
 
 import useDelete__namePascal__ from "../http/mutations/use-__nameKebab__-delete";
 import useToggleStatus__namePascal__ from "../http/mutations/use-__nameKebab__-toggle-status";
@@ -29,8 +29,8 @@ export const use__namePascal__List = () => {
   const handleUpdate = useCallback(
     (id: string) => {
       navigate({
-        to: "/__nameKebab__/$__nameKebab___id",
-        params: { "__nameKebab___id": id },
+        to: "/{{labelPt}}/$__nameKebab___id",
+        params: { __nameKebab___id: id },
       });
     },
     [navigate]
@@ -84,10 +84,10 @@ export const use__namePascal__List = () => {
       search: (old) => ({
         ...old,
         ...newParams,
+        page: 1,
       }),
     });
   };
-
 
   const columns = useMemo(
     () =>

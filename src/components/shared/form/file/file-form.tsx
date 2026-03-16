@@ -6,11 +6,9 @@ import {
   useFormContext,
 } from "react-hook-form";
 
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import {
   Download,
-  File,
+  File as FileIcon,
   FileText,
   Image as ImageIcon,
   Sheet,
@@ -18,23 +16,30 @@ import {
   Upload,
 } from "lucide-react";
 
+import { useConfirmStore } from "@/hooks/use-confirm-store";
+import { Button } from "@/ui/button";
 import {
-  Button,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/shadcn";
+} from "@/ui/form";
 
-interface IFileAttachment {
+// Tipo para arquivo existente vindo do backend
+interface IExistingFile {
   id: string;
   file_name: string;
   size_bytes: number;
   mime_type: string;
+  url: string;
+  key?: string;
+  type?: string;
   createdAt?: string;
-  url?: string;
 }
+
+// Tipo união: pode ser File nativo OU metadados do backend
+export type TFileItem = File | IExistingFile;
 
 interface IFileFormProps<T extends FieldValues> {
   control?: Control<T>;
@@ -44,7 +49,18 @@ interface IFileFormProps<T extends FieldValues> {
   accept?: string;
   multiple?: boolean;
   className?: string;
+  onDeleteExistingFile?: (id: string) => Promise<void>;
 }
+
+// Type guard para identificar se é File nativo
+const isNativeFile = (item: TFileItem): item is File => {
+  return item instanceof File;
+};
+
+// Type guard para identificar se é arquivo existente
+const isExistingFile = (item: TFileItem): item is IExistingFile => {
+  return !isNativeFile(item) && "url" in item;
+};
 
 // Helper: Formata tamanho de arquivo
 const formatFileSize = (bytes: number): string => {
@@ -70,7 +86,7 @@ const getFileIcon = (mimeType: string) => {
   if (mimeType.includes("sheet") || mimeType.includes("csv")) {
     return <Sheet className="h-5 w-5" />;
   }
-  return <File className="h-5 w-5" />;
+  return <FileIcon className="h-5 w-5" />;
 };
 
 export function FileForm<T extends FieldValues>({
@@ -80,49 +96,101 @@ export function FileForm<T extends FieldValues>({
   accept = ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.xls,.xlsx,.csv",
   multiple = true,
   className,
-}: IFileFormProps<T>) {
+  onDeleteExistingFile,
+}: Readonly<IFileFormProps<T>>) {
   const form = useFormContext<T>();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const confirm = useConfirmStore((state) => state.confirm);
 
   const handleFileSelect = (
     e: React.ChangeEvent<HTMLInputElement>,
-    currentValue: IFileAttachment[],
-    onChange: (value: IFileAttachment[]) => void
+    currentValue: TFileItem[],
+    onChange: (value: TFileItem[]) => void
   ) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const newAttachments: IFileAttachment[] = Array.from(files).map((file) => ({
-      id: crypto.randomUUID(),
-      file_name: file.name,
-      size_bytes: file.size,
-      mime_type: file.type || "application/octet-stream",
-      createdAt: new Date().toISOString(),
-      url: URL.createObjectURL(file),
-    }));
+    const newFiles = Array.from(files);
 
-    onChange([...currentValue, ...newAttachments]);
+    // Se multiple for false, substitui o arquivo existente ao invés de adicionar
+    if (!multiple) {
+      // Pega apenas o primeiro arquivo selecionado
+      onChange([newFiles[0]]);
+    } else {
+      onChange([...currentValue, ...newFiles]);
+    }
+
     e.target.value = "";
   };
 
-  const handleDownload = (attachment: IFileAttachment) => {
-    if (attachment.url) {
+  const handleDownload = (item: TFileItem) => {
+    if (isNativeFile(item)) {
+      // Arquivo local (File nativo)
+      const url = URL.createObjectURL(item);
       const link = document.createElement("a");
-      link.href = attachment.url;
-      link.download = attachment.file_name;
-      document.body.appendChild(link);
+      link.href = url;
+      link.download = item.name;
       link.click();
-      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } else if (isExistingFile(item)) {
+      // Arquivo do backend
+      const link = document.createElement("a");
+      link.href = item.url;
+      link.download = item.file_name;
+      link.target = "_blank";
+      link.click();
     }
   };
 
-  const handleDelete = (
-    id: string,
-    currentValue: IFileAttachment[],
-    onChange: (value: IFileAttachment[]) => void
+  const handleDelete = async (
+    index: number,
+    currentValue: TFileItem[],
+    onChange: (value: TFileItem[]) => void
   ) => {
-    const newAttachments = currentValue.filter((item) => item.id !== id);
-    onChange(newAttachments);
+    const item = currentValue[index];
+
+    // Se for arquivo existente e tiver callback, mostrar confirmação
+    if (isExistingFile(item) && onDeleteExistingFile) {
+      const confirmed = await confirm({
+        title: "Excluir anexo",
+        message:
+          "Tem certeza que deseja excluir este anexo? Esta ação não pode ser desfeita.",
+        variant: "destructive",
+      });
+
+      if (confirmed) {
+        try {
+          await onDeleteExistingFile(item.id);
+          // Remove o arquivo da lista após exclusão bem-sucedida
+          const newFiles = currentValue.filter((_, i) => i !== index);
+          onChange(newFiles);
+        } catch (error) {
+          // Erro já é tratado pela mutation/API (toast)
+          // Mantém o arquivo na lista se a exclusão falhar
+          console.error("Erro ao excluir arquivo:", error);
+        }
+      }
+      return;
+    }
+
+    // Para arquivos locais ou se não houver callback, remover imediatamente
+    const newFiles = currentValue.filter((_, i) => i !== index);
+    onChange(newFiles);
+  };
+
+  // Helper: Extrai nome do arquivo
+  const getFileName = (item: TFileItem): string => {
+    return isNativeFile(item) ? item.name : item.file_name;
+  };
+
+  // Helper: Extrai tamanho do arquivo
+  const getFileSize = (item: TFileItem): number => {
+    return isNativeFile(item) ? item.size : item.size_bytes;
+  };
+
+  // Helper: Extrai mime type
+  const getMimeType = (item: TFileItem): string => {
+    return isNativeFile(item) ? item.type : item.mime_type;
   };
 
   return (
@@ -130,7 +198,9 @@ export function FileForm<T extends FieldValues>({
       control={form.control}
       name={name}
       render={({ field }) => {
-        const items = field.value || [];
+        const items: TFileItem[] = field.value || [];
+        // Quando multiple for false, garante que apenas 1 arquivo seja exibido
+        const displayItems = multiple ? items : items.slice(0, 1);
 
         return (
           <FormItem className={className}>
@@ -142,7 +212,7 @@ export function FileForm<T extends FieldValues>({
                     <span className="text-destructive text-xs">*</span>
                   )}
                   <span className="text-muted-foreground text-xs font-normal">
-                    ({items.length})
+                    ({displayItems.length})
                   </span>
                 </FormLabel>
                 <Button
@@ -153,7 +223,11 @@ export function FileForm<T extends FieldValues>({
                   className="h-8"
                 >
                   <Upload className="mr-2 h-3.5 w-3.5" />
-                  Anexar
+                  {multiple
+                    ? "Anexar"
+                    : displayItems.length > 0
+                      ? "Substituir"
+                      : "Anexar"}
                 </Button>
               </div>
 
@@ -168,61 +242,63 @@ export function FileForm<T extends FieldValues>({
                 />
               </FormControl>
 
-              {items.length === 0 ? (
+              {displayItems.length === 0 ? (
                 <p className="text-muted-foreground bg-secondary/20 border-border rounded border border-dashed px-3 py-2 text-xs">
                   Nenhum arquivo anexado
                 </p>
               ) : (
                 <div className="space-y-2">
-                  {items.map((attachment: IFileAttachment) => (
-                    <div
-                      key={attachment.id}
-                      className="bg-secondary/20 border-border/30 hover:bg-secondary/30 flex items-center gap-3 rounded-lg border p-3 transition-colors"
-                    >
-                      <div className="bg-secondary/50 border-border/50 text-muted-foreground flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border">
-                        {getFileIcon(attachment.mime_type)}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-foreground truncate text-sm font-medium">
-                          {attachment.file_name}
-                        </p>
-                        <p className="text-muted-foreground text-xs">
-                          {formatFileSize(attachment.size_bytes)} •{" "}
-                          {format(
-                            new Date(attachment.createdAt || ""),
-                            "dd/MM/yyyy",
-                            {
-                              locale: ptBR,
+                  {displayItems.map((item, index) => {
+                    const fileName = getFileName(item);
+                    const fileSize = getFileSize(item);
+                    const mimeType = getMimeType(item);
+                    const key = isExistingFile(item)
+                      ? item.id
+                      : `${fileName}-${index}`;
+
+                    return (
+                      <div
+                        key={key}
+                        className="bg-secondary/20 border-border/30 hover:bg-secondary/30 flex items-center gap-3 rounded-lg border p-3 transition-colors"
+                      >
+                        <div className="bg-secondary/50 border-border/50 text-muted-foreground flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border">
+                          {getFileIcon(mimeType)}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-foreground truncate text-sm font-medium">
+                            {fileName}
+                          </p>
+                          <p className="text-muted-foreground text-xs">
+                            {formatFileSize(fileSize)}
+                          </p>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-1">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="text-muted-foreground hover:text-foreground h-8 w-8"
+                            onClick={() => handleDownload(item)}
+                            aria-label="Download"
+                          >
+                            <Download className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="text-muted-foreground hover:text-destructive h-8 w-8"
+                            onClick={() =>
+                              handleDelete(index, items, field.onChange)
                             }
-                          )}
-                        </p>
+                            aria-label="Excluir"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
-                      <div className="flex shrink-0 items-center gap-1">
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="text-muted-foreground hover:text-foreground h-8 w-8"
-                          onClick={() => handleDownload(attachment)}
-                          aria-label="Download"
-                        >
-                          <Download className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="text-muted-foreground hover:text-destructive h-8 w-8"
-                          onClick={() =>
-                            handleDelete(attachment.id, items, field.onChange)
-                          }
-                          aria-label="Excluir"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>

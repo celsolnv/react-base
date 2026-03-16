@@ -1,4 +1,5 @@
-import { Card, CardContent, CardHeader, Skeleton } from "@/components/shadcn";
+import { Card, CardContent, CardHeader } from "@/ui/card";
+import { Skeleton } from "@/ui/skeleton";
 
 export function CardFormSkeleton() {
   return (

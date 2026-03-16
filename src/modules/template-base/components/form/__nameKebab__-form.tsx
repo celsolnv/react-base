@@ -2,7 +2,8 @@ import { useFormContext } from "react-hook-form";
 
 import { User } from "lucide-react";
 
-import { CardForm, InputForm } from "@/components/shared";
+import { CardForm } from "@/components/shared/form/card/card-form";
+import { InputForm } from "@/components/shared/form/input/input-form";
 
 export function __namePascal__Form() {
   const form = useFormContext();

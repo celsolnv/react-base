@@ -1,9 +1,23 @@
-import { isAfter, isBefore, isSameDay, parseISO, startOfDay } from "date-fns";
-import { z } from "zod";
+import { isValidPhoneNumber } from "react-phone-number-input";
+
+import { isAfter, isValid, parseISO, startOfDay } from "date-fns";
+import z from "zod";
 
 import masks from "@/utils/masks";
 
-export const string = (name: string, g = "o", required = true) => {
+// Overload para a função string
+export function string(name: string, g?: string, required?: true): z.ZodString;
+export function string(
+  name: string,
+  g: string,
+  required: false
+): z.ZodOptional<z.ZodNullable<z.ZodString>>;
+
+export function string(
+  name: string,
+  g: string | undefined = "o",
+  required: boolean = true
+): z.ZodTypeAny {
   if (required) {
     return z
       .string({
@@ -17,25 +31,49 @@ export const string = (name: string, g = "o", required = true) => {
     .nullable()
     .transform((val) => val ?? null)
     .optional();
-};
+}
 
-export const phone = (name: string) => {
-  return z.string({ message: `${name} é obrigatório.` }).refine(
-    (value) => {
-      const cleanValue = value.replace(/\D/g, "");
-      return cleanValue.length > 10 && cleanValue.length <= 11;
-    },
-    { message: "Telefone inválido. Deve conter 11 dígitos." }
-  );
+export const phone = (name: string, required: boolean = true) => {
+  const transform = (value: string | null | undefined) => {
+    if (!value) return null;
+    const cleanValue = masks.removeNonNumbers(value);
+    return `+${cleanValue}`;
+  };
+  if (required) {
+    return z
+      .string({ message: `${name} é obrigatório.` })
+      .refine(isValidPhoneNumber, {
+        message: "Telefone inválido. Deve conter 11 dígitos.",
+      })
+      .transform(transform);
+  }
+  return z
+    .string({ message: `${name} é obrigatório.` })
+    .nullable()
+    .refine(
+      (value) => {
+        if (!value) return true; // Permitir nulo/undefined se não for obrigatório
+        return isValidPhoneNumber(value);
+      },
+      {
+        message: "Telefone inválido. Deve conter 11 dígitos.",
+      }
+    )
+    .transform(transform);
 };
 export const cpf = () => {
-  return z.string({ message: "CPF é obrigatório." }).refine(
-    (value) => {
-      const cleanValue = value.replace(/\D/g, "");
-      return cleanValue.length === 11;
-    },
-    { message: "CPF inválido." }
-  );
+  return z
+    .string({ message: "CPF é obrigatório." })
+    .refine(
+      (value) => {
+        const cleanValue = value.replace(/\D/g, "");
+        return cleanValue.length === 11;
+      },
+      { message: "CPF inválido." }
+    )
+    .transform((value) => {
+      return masks.removeNonNumbers(value);
+    });
 };
 export const cnpj = (name = "CNPJ") => {
   return z.string({ message: `${name} é obrigatório.` }).refine(
@@ -103,9 +141,8 @@ export const numberTransform = (_name: string, required = true) => {
 
 export const email = (name: string) => {
   return z
-    .string({ message: `${name} é obrigatório.` })
+    .email({ message: `${name} é obrigatório.` })
     .min(1, { message: `${name} é obrigatório.` })
-    .email({ message: "E-mail inválido." })
     .max(255, { message: `${name} deve ter no máximo 255 caracteres.` });
 };
 
@@ -145,18 +182,21 @@ export const password = z
 
 export const dateNotFuture = z
   .string({
-    message: "A data é obrigatória",
+    error: "A data é obrigatória",
   })
   .refine(
     (dateString) => {
-      try {
-        const date = parseISO(dateString);
-        const today = startOfDay(new Date());
-        const dateToCheck = startOfDay(date);
-        return isBefore(dateToCheck, today) || isSameDay(dateToCheck, today);
-      } catch {
-        return false;
-      }
+      // parseISO é ideal para o formato YYYY-MM-DD
+      const date = parseISO(dateString);
+
+      // Se a string não for uma data válida, o refine falha
+      if (!isValid(date)) return false;
+
+      const today = startOfDay(new Date());
+
+      // Retorna true se a data NÃO for depois de hoje
+      // (ou seja, hoje ou passado)
+      return !isAfter(date, today);
     },
     {
       message: "A data não pode ser uma data futura",
@@ -169,18 +209,19 @@ export const dateFutureAllowed = z.string({
 
 export const dateOnlyFuture = z
   .string({
-    message: "A data é obrigatória",
+    error: "A data é obrigatória",
   })
   .refine(
     (dateString) => {
-      try {
-        const date = parseISO(dateString);
-        const today = startOfDay(new Date());
-        const dateToCheck = startOfDay(date);
-        return isAfter(dateToCheck, today);
-      } catch {
-        return false;
-      }
+      const date = parseISO(dateString);
+
+      // Garante que a string é uma data válida antes de comparar
+      if (!isValid(date)) return false;
+
+      const today = startOfDay(new Date());
+
+      // Verifica se a data fornecida é estritamente posterior a hoje (00:00)
+      return isAfter(date, today);
     },
     {
       message: "A data deve ser uma data futura",
@@ -225,4 +266,38 @@ export const money = (name: string, required = true) => {
       return newValue;
     })
     .optional();
+};
+
+// Helper para arrays de arquivos (File nativo ou metadados do backend)
+// O transform filtra apenas instâncias de File para envio ao backend
+export const fileArray = (_name: string, required = false) => {
+  const baseSchema = z.array(z.any()).transform((items) => {
+    if (!items || !Array.isArray(items)) return [];
+    // Filtrar apenas File nativos, ignorar metadados de arquivos existentes
+    return items.filter((item) => item instanceof File);
+  });
+
+  if (required) {
+    return baseSchema.refine((files) => files.length > 0, {
+      message: "Pelo menos um arquivo é obrigatório.",
+    });
+  }
+
+  return baseSchema.optional();
+};
+
+export const file = (name: string, required = false) => {
+  const baseSchema = z.any().transform((value) => {
+    if (!value) return undefined;
+    if (value instanceof File) return value;
+    return undefined;
+  });
+
+  if (required) {
+    return baseSchema.refine((file) => file instanceof File, {
+      message: `${name} é obrigatório.`,
+    });
+  }
+
+  return baseSchema.optional();
 };

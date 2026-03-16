@@ -16,8 +16,8 @@ export function __namePascal__ListPageSkeleton() {
         <div className="border-border bg-card shadow-card flex h-full flex-col overflow-hidden rounded-lg border">
           {/* Filtros e Busca Skeleton */}
           <div className="bg-secondary/30 border-border flex shrink-0 items-center gap-4 border-b p-4">
-            <Skeleton className="h-10 w-[300px]" /> {/* InputSearch */}
-            <Skeleton className="h-10 w-[180px]" /> {/* SelectStatus */}
+            <Skeleton className="h-10 w-75" /> {/* InputSearch */}
+            <Skeleton className="h-10 w-75" /> {/* SelectStatus */}
           </div>
 
           {/* Tabela Skeleton */}
@@ -25,21 +25,21 @@ export function __namePascal__ListPageSkeleton() {
             <div className="w-full caption-bottom text-sm">
               {/* Table Header */}
               <div className="flex h-10 items-center border-b px-4">
-                <Skeleton className="mr-4 h-4 w-[40px]" /> {/* Checkbox */}
-                <Skeleton className="mr-auto h-4 w-[150px]" /> {/* Nome */}
-                <Skeleton className="mr-8 h-4 w-[100px]" /> {/* Status */}
-                <Skeleton className="mr-8 h-4 w-[80px]" /> {/* Data */}
-                <Skeleton className="h-4 w-[40px]" /> {/* Actions */}
+                <Skeleton className="mr-4 h-4 w-10" /> {/* Checkbox */}
+                <Skeleton className="mr-auto h-4 w-32" /> {/* Nome */}
+                <Skeleton className="mr-8 h-4 w-24" /> {/* Status */}
+                <Skeleton className="mr-8 h-4 w-20" /> {/* Data */}
+                <Skeleton className="h-4 w-10" /> {/* Actions */}
               </div>
 
               {/* Table Body - 5 rows */}
               <div className="p-0">
                 {Array.from({ length: 5 }, (_, index) => index).map((i) => (
                   <div key={i} className="flex h-16 items-center border-b px-4">
-                    <Skeleton className="mr-4 h-4 w-[40px]" />
-                    <Skeleton className="mr-auto h-4 w-[200px]" />
-                    <Skeleton className="mr-8 h-4 w-[100px]" />
-                    <Skeleton className="mr-8 h-4 w-[80px]" />
+                    <Skeleton className="mr-4 h-4 w-10" />
+                    <Skeleton className="mr-auto h-4 w-32" />
+                    <Skeleton className="mr-8 h-4 w-24" />
+                    <Skeleton className="mr-8 h-4 w-20" />
                     <Skeleton className="h-8 w-8 rounded-full" />
                   </div>
                 ))}
@@ -48,7 +48,7 @@ export function __namePascal__ListPageSkeleton() {
 
             {/* Pagination Skeleton */}
             <div className="flex items-center justify-between px-2 py-4">
-              <Skeleton className="h-4 w-[200px]" />
+              <Skeleton className="h-4 w-20" />
               <div className="flex items-center space-x-2">
                 <Skeleton className="h-8 w-8" />
                 <Skeleton className="h-8 w-8" />

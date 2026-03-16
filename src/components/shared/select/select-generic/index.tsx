@@ -14,6 +14,7 @@ interface ISelectGenericProps {
   placeholder: string;
   options: IOptionSelect[];
   className?: string;
+  defaultValue?: string;
 }
 
 export function SelectGeneric({
@@ -22,9 +23,14 @@ export function SelectGeneric({
   placeholder = "Selecione uma opção",
   options,
   className,
+  defaultValue,
 }: Readonly<ISelectGenericProps>) {
   return (
-    <Select value={value} onValueChange={onValueChange}>
+    <Select
+      value={value}
+      onValueChange={onValueChange}
+      defaultValue={defaultValue}
+    >
       <SelectTrigger
         className={cn("bg-muted/50 w-full sm:w-[180px]", className)}
       >

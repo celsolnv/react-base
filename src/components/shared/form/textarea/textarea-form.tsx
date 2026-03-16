@@ -1,8 +1,7 @@
 import {
-  type Control,
   type FieldPath,
   type FieldValues,
-  useFormState,
+  useFormContext,
 } from "react-hook-form";
 
 import {
@@ -12,11 +11,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Textarea,
-} from "@/components/shadcn";
+} from "@/ui/form";
+import { Textarea } from "@/ui/textarea";
 
 interface IControlledTextareaProps<T extends FieldValues> {
-  control: Control<T>;
   name: FieldPath<T>;
   label?: string;
   required?: boolean;
@@ -27,7 +25,6 @@ interface IControlledTextareaProps<T extends FieldValues> {
 }
 
 export const TextareaForm = <T extends FieldValues>({
-  control,
   name,
   label,
   required,
@@ -36,13 +33,13 @@ export const TextareaForm = <T extends FieldValues>({
   className,
   description,
 }: IControlledTextareaProps<T>) => {
-  const { isSubmitting } = useFormState({ control });
+  const form = useFormContext();
+  const isSubmitting = form.formState.isSubmitting;
   return (
     <FormField
-      control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className={className}>
           {label && (
             <FormLabel className="text-foreground font-medium">
               {label}
@@ -55,7 +52,6 @@ export const TextareaForm = <T extends FieldValues>({
               loading={isSubmitting}
               placeholder={placeholder}
               disabled={disabled}
-              className={className}
             />
           </FormControl>
           {description && (

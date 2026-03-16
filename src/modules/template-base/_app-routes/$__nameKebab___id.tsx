@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import * as api from "@/modules/__nameKebab__/http/api";
-import  __namePascal__UpdatePage  from "@/modules/__nameKebab__/update/__nameKebab__-update";
+import __namePascal__UpdatePage from "@/modules/__nameKebab__/update/__nameKebab__-update";
 
 export const Route = createFileRoute(
   "/_private/__nameKebab__/$__nameKebab___id"

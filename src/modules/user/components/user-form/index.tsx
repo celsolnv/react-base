@@ -1,7 +1,7 @@
-import { AddressForm } from "@/components/shared";
+import { AddressForm } from "@/components/shared/form/address-form";
 
 import { AccessForm } from "./access-form";
-import { AttachmentForm } from "./attachment-form";
+import { AttachmentsForm } from "./attachment-form";
 import { BasicForm } from "./basic-form";
 
 export function UserForm() {
@@ -10,7 +10,7 @@ export function UserForm() {
       <BasicForm />
       <AccessForm />
       <AddressForm prefix="address." />
-      <AttachmentForm />
+      <AttachmentsForm />
     </div>
   );
 }

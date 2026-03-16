@@ -1,6 +1,6 @@
 import { Edit, Power, Trash2 } from "lucide-react";
 
-import { buildColumns } from "@/components/shared";
+import { buildColumns } from "@/components/shared/data-table/column-builder";
 import type { IAccessProfile } from "@/types/IAcessProfile";
 
 export interface IAccessProfileTableActions {
@@ -39,11 +39,13 @@ export function getColumns(actions: IAccessProfileTableActions) {
         label: "Editar",
         icon: Edit,
         onClick: (profile) => actions.onEdit(profile),
+        permission: "access_profile.update",
       },
       {
         label: (profile) => (profile.is_active ? "Desativar" : "Ativar"),
         icon: Power,
         onClick: (profile) => actions.onDeactivate(profile),
+        permission: "access_profile.update",
       },
       {
         label: "Excluir",
@@ -51,6 +53,7 @@ export function getColumns(actions: IAccessProfileTableActions) {
         onClick: (profile) => actions.onDelete(profile),
         variant: "destructive",
         hasSeparatorBefore: true,
+        permission: "access_profile.destroy",
       },
     ]
   );

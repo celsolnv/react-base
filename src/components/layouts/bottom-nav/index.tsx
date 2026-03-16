@@ -4,8 +4,9 @@ import * as React from "react";
 
 import { ArrowLeft } from "lucide-react";
 
-import { Button, useSidebar } from "@/components/shadcn";
 import { cn } from "@/lib/utils";
+import { Button } from "@/ui/button";
+import { useSidebar } from "@/ui/sidebar";
 
 import type { BottomNavProps } from "./types";
 

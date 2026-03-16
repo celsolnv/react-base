@@ -1,28 +1,23 @@
-import { useEffect, useRef, useState } from "react";
+import { useId } from "react";
 
 import { Check, ChevronsUpDown, Loader2, X } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+import { Button } from "@/ui/button";
 import {
-  Button,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/shadcn";
-import { useDebounce } from "@/hooks/useDebounce";
-import { cn } from "@/lib/utils";
+} from "@/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover";
 
-export interface IAsyncSelectOption {
-  id: string;
-  label?: string;
-  name?: string;
-  [key: string]: unknown;
-}
+import type { IAsyncSelectOption } from "./use-async-select";
+import { useAsyncSelect } from "./use-async-select";
+
+export type { IAsyncSelectOption } from "./use-async-select";
 
 interface IAsyncSelectProps {
   value?: string | string[];
@@ -53,114 +48,35 @@ export function AsyncSelect({
   className = "",
   maxSelectedDisplay = 2,
 }: Readonly<IAsyncSelectProps>) {
-  const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<IAsyncSelectOption[]>([]);
-  const abortControllerRef = useRef<AbortController | null>(null);
+  const listboxId = useId();
 
-  const debouncedSearch = useDebounce(searchQuery, debounceTime);
-
-  // Normaliza o valor para sempre trabalhar com array internamente
-  const selectedValues = multiple
-    ? Array.isArray(value)
-      ? value
-      : value
-        ? [value]
-        : []
-    : value
-      ? [String(value)]
-      : [];
-
-  // Buscar resultados quando o termo de busca mudar
-  useEffect(() => {
-    const fetchResults = async () => {
-      // Cancela requisição anterior se existir
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-
-      // Verifica se atende o mínimo de caracteres
-      if (debouncedSearch.length < minSearchLength) {
-        setResults([]);
-        return;
-      }
-
-      abortControllerRef.current = new AbortController();
-      setIsLoading(true);
-
-      try {
-        const data = await fetchOptions(debouncedSearch);
-        setResults(data);
-      } catch (error) {
-        // Ignora erros de cancelamento
-        if (error instanceof Error && error.name !== "AbortError") {
-          console.error("Erro ao buscar dados:", error);
-        }
-        setResults([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (open) {
-      fetchResults();
-    }
-
-    // Cleanup: cancela requisição quando componente desmonta ou dependências mudam
-    return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-    };
-  }, [debouncedSearch, open, fetchOptions, minSearchLength]);
-
-  // Função para obter os labels dos itens selecionados
-  const getSelectedLabels = () => {
-    if (selectedValues.length === 0) return placeholder;
-
-    const labels = selectedValues
-      .map((id) => {
-        const found = results.find((item) => String(item.id) === String(id));
-        return found ? found.label || found.name || id : id;
-      })
-      .filter(Boolean);
-
-    if (labels.length === 0) return placeholder;
-
-    if (multiple) {
-      if (labels.length <= maxSelectedDisplay) {
-        return labels.join(", ");
-      }
-      return `${labels.slice(0, maxSelectedDisplay).join(", ")} +${labels.length - maxSelectedDisplay}`;
-    }
-
-    return labels[0];
-  };
-
-  // Função para lidar com a seleção de um item
-  const handleSelect = (itemId: string) => {
-    if (multiple) {
-      const isSelected = selectedValues.includes(itemId);
-      const newValues = isSelected
-        ? selectedValues.filter((id) => id !== itemId)
-        : [...selectedValues, itemId];
-
-      onValueChange(newValues);
-    } else {
-      onValueChange(itemId);
-      setOpen(false);
-      setSearchQuery("");
-    }
-  };
-
-  // Função para limpar a seleção
-  const handleClear = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onValueChange(multiple ? [] : "");
-  };
-
-  const hasSelection = selectedValues.length > 0;
+  const {
+    open,
+    searchQuery,
+    isLoading,
+    results,
+    hasSelection,
+    setOpen,
+    setSearchQuery,
+    handleSelect,
+    handleClear,
+    getSelectedLabels,
+    isItemSelected,
+    emptyMessage: hookEmptyMessage,
+    loadingMessage: hookLoadingMessage,
+    minSearchLength: hookMinSearchLength,
+  } = useAsyncSelect({
+    value,
+    onValueChange,
+    fetchOptions,
+    placeholder,
+    emptyMessage,
+    loadingMessage,
+    debounceTime,
+    minSearchLength,
+    multiple,
+    maxSelectedDisplay,
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -169,6 +85,7 @@ export function AsyncSelect({
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          aria-controls={listboxId}
           disabled={disabled}
           className={cn(
             "bg-muted/50 w-full justify-between",
@@ -189,7 +106,7 @@ export function AsyncSelect({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-(--radix-popover-trigger-width) p-0"
+        className="w-[--radix-popover-trigger-width] p-0"
         align="start"
       >
         <Command shouldFilter={false}>
@@ -198,29 +115,30 @@ export function AsyncSelect({
             value={searchQuery}
             onValueChange={setSearchQuery}
           />
-          <CommandList>
+          <CommandList id={listboxId}>
             {isLoading ? (
               <div className="flex items-center justify-center p-4">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 <span className="text-muted-foreground text-sm">
-                  {loadingMessage}
+                  {hookLoadingMessage}
                 </span>
               </div>
             ) : results.length === 0 ? (
               <CommandEmpty>
-                {minSearchLength > 0 && searchQuery.length < minSearchLength
-                  ? `Digite pelo menos ${minSearchLength} caracteres para buscar.`
-                  : emptyMessage}
+                {hookMinSearchLength > 0 &&
+                searchQuery.length < hookMinSearchLength
+                  ? `Digite pelo menos ${hookMinSearchLength} caracteres para buscar.`
+                  : hookEmptyMessage}
               </CommandEmpty>
             ) : (
               <CommandGroup>
                 {results.map((item) => {
-                  const isSelected = selectedValues.includes(String(item.id));
+                  const isSelected = isItemSelected(item.id);
                   return (
                     <CommandItem
                       key={item.id}
                       value={item.id}
-                      onSelect={() => handleSelect(String(item.id))}
+                      onSelect={() => handleSelect(item.id)}
                     >
                       <Check
                         className={cn(

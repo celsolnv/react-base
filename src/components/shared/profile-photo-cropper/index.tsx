@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { useConfirmStore } from "@/hooks/use-confirm-store";
+
 import { CropperDialog } from "./cropper-dialog";
 import { PhotoDropzone } from "./photo-dropzone";
 import { PhotoPreview } from "./photo-preview";
@@ -21,13 +23,15 @@ export function ProfilePhotoCropper({
   initials = "U",
   minZoom = 1,
   maxZoom = 3,
-}: ProfilePhotoCropperProps) {
+  onDeleteExistingFile,
+}: Readonly<ProfilePhotoCropperProps>) {
+  const confirm = useConfirmStore((state) => state.confirm);
   // Dialog state
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
 
   // Preview state
-  const [previewUrl, setPreviewUrl] = useState<string | null>(
+  const [previewUrl, setPreviewUrl] = useState<string | null>(() =>
     getPreviewUrl(value)
   );
 
@@ -96,10 +100,34 @@ export function ProfilePhotoCropper({
   }, [previewUrl]);
 
   // Remove photo
-  const handleRemove = useCallback(() => {
+  const handleRemove = useCallback(async () => {
+    // Se for uma URL (foto existente do backend) e tiver callback, mostrar confirmação
+    if (typeof value === "string" && onDeleteExistingFile) {
+      const confirmed = await confirm({
+        title: "Excluir foto de perfil",
+        message:
+          "Tem certeza que deseja excluir esta foto de perfil? Esta ação não pode ser desfeita.",
+        variant: "destructive",
+      });
+
+      if (confirmed) {
+        try {
+          await onDeleteExistingFile();
+          setPreviewUrl(null);
+          onChange(null);
+        } catch (error) {
+          // Erro já é tratado pela mutation/API (toast)
+          // Mantém a foto se a exclusão falhar
+          console.error("Erro ao excluir foto de perfil:", error);
+        }
+      }
+      return;
+    }
+
+    // Para arquivos locais ou se não houver callback, remover imediatamente
     setPreviewUrl(null);
     onChange(null);
-  }, [onChange]);
+  }, [onChange, value, onDeleteExistingFile, confirm]);
 
   return (
     <div className="flex flex-col items-center gap-4">

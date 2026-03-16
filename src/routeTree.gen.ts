@@ -19,9 +19,9 @@ import { Route as PrivateUsuariosCriarRouteImport } from './app/_private/usuario
 import { Route as PrivateUsuariosUser_idRouteImport } from './app/_private/usuarios/$user_id'
 import { Route as PrivateNivelAcessoCriarRouteImport } from './app/_private/nivel-acesso/criar'
 import { Route as PrivateNivelAcessoAccess_profile_idRouteImport } from './app/_private/nivel-acesso/$access_profile_id'
-import { Route as PublicAuthResetPasswordIndexRouteImport } from './app/_public/_auth/reset-password/index'
+import { Route as PublicAuthRedefinirSenhaIndexRouteImport } from './app/_public/_auth/redefinir-senha/index'
 import { Route as PublicAuthLoginIndexRouteImport } from './app/_public/_auth/login/index'
-import { Route as PublicAuthForgotPasswordIndexRouteImport } from './app/_public/_auth/forgot-password/index'
+import { Route as PublicAuthEsqueciSenhaIndexRouteImport } from './app/_public/_auth/esqueci-senha/index'
 
 const PrivateRoute = PrivateRouteImport.update({
   id: '/_private',
@@ -72,10 +72,10 @@ const PrivateNivelAcessoAccess_profile_idRoute =
     path: '/nivel-acesso/$access_profile_id',
     getParentRoute: () => PrivateRoute,
   } as any)
-const PublicAuthResetPasswordIndexRoute =
-  PublicAuthResetPasswordIndexRouteImport.update({
-    id: '/reset-password/',
-    path: '/reset-password/',
+const PublicAuthRedefinirSenhaIndexRoute =
+  PublicAuthRedefinirSenhaIndexRouteImport.update({
+    id: '/redefinir-senha/',
+    path: '/redefinir-senha/',
     getParentRoute: () => PublicAuthRoute,
   } as any)
 const PublicAuthLoginIndexRoute = PublicAuthLoginIndexRouteImport.update({
@@ -83,10 +83,10 @@ const PublicAuthLoginIndexRoute = PublicAuthLoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => PublicAuthRoute,
 } as any)
-const PublicAuthForgotPasswordIndexRoute =
-  PublicAuthForgotPasswordIndexRouteImport.update({
-    id: '/forgot-password/',
-    path: '/forgot-password/',
+const PublicAuthEsqueciSenhaIndexRoute =
+  PublicAuthEsqueciSenhaIndexRouteImport.update({
+    id: '/esqueci-senha/',
+    path: '/esqueci-senha/',
     getParentRoute: () => PublicAuthRoute,
   } as any)
 
@@ -99,9 +99,9 @@ export interface FileRoutesByFullPath {
   '/usuarios/criar': typeof PrivateUsuariosCriarRoute
   '/nivel-acesso/': typeof PrivateNivelAcessoIndexRoute
   '/usuarios/': typeof PrivateUsuariosIndexRoute
-  '/forgot-password/': typeof PublicAuthForgotPasswordIndexRoute
+  '/esqueci-senha/': typeof PublicAuthEsqueciSenhaIndexRoute
   '/login/': typeof PublicAuthLoginIndexRoute
-  '/reset-password/': typeof PublicAuthResetPasswordIndexRoute
+  '/redefinir-senha/': typeof PublicAuthRedefinirSenhaIndexRoute
 }
 export interface FileRoutesByTo {
   '/perfil': typeof PrivatePerfilRoute
@@ -112,9 +112,9 @@ export interface FileRoutesByTo {
   '/usuarios/criar': typeof PrivateUsuariosCriarRoute
   '/nivel-acesso': typeof PrivateNivelAcessoIndexRoute
   '/usuarios': typeof PrivateUsuariosIndexRoute
-  '/forgot-password': typeof PublicAuthForgotPasswordIndexRoute
+  '/esqueci-senha': typeof PublicAuthEsqueciSenhaIndexRoute
   '/login': typeof PublicAuthLoginIndexRoute
-  '/reset-password': typeof PublicAuthResetPasswordIndexRoute
+  '/redefinir-senha': typeof PublicAuthRedefinirSenhaIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -128,9 +128,9 @@ export interface FileRoutesById {
   '/_private/usuarios/criar': typeof PrivateUsuariosCriarRoute
   '/_private/nivel-acesso/': typeof PrivateNivelAcessoIndexRoute
   '/_private/usuarios/': typeof PrivateUsuariosIndexRoute
-  '/_public/_auth/forgot-password/': typeof PublicAuthForgotPasswordIndexRoute
+  '/_public/_auth/esqueci-senha/': typeof PublicAuthEsqueciSenhaIndexRoute
   '/_public/_auth/login/': typeof PublicAuthLoginIndexRoute
-  '/_public/_auth/reset-password/': typeof PublicAuthResetPasswordIndexRoute
+  '/_public/_auth/redefinir-senha/': typeof PublicAuthRedefinirSenhaIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -143,9 +143,9 @@ export interface FileRouteTypes {
     | '/usuarios/criar'
     | '/nivel-acesso/'
     | '/usuarios/'
-    | '/forgot-password/'
+    | '/esqueci-senha/'
     | '/login/'
-    | '/reset-password/'
+    | '/redefinir-senha/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/perfil'
@@ -156,9 +156,9 @@ export interface FileRouteTypes {
     | '/usuarios/criar'
     | '/nivel-acesso'
     | '/usuarios'
-    | '/forgot-password'
+    | '/esqueci-senha'
     | '/login'
-    | '/reset-password'
+    | '/redefinir-senha'
   id:
     | '__root__'
     | '/_private'
@@ -171,9 +171,9 @@ export interface FileRouteTypes {
     | '/_private/usuarios/criar'
     | '/_private/nivel-acesso/'
     | '/_private/usuarios/'
-    | '/_public/_auth/forgot-password/'
+    | '/_public/_auth/esqueci-senha/'
     | '/_public/_auth/login/'
-    | '/_public/_auth/reset-password/'
+    | '/_public/_auth/redefinir-senha/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -253,11 +253,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateNivelAcessoAccess_profile_idRouteImport
       parentRoute: typeof PrivateRoute
     }
-    '/_public/_auth/reset-password/': {
-      id: '/_public/_auth/reset-password/'
-      path: '/reset-password'
-      fullPath: '/reset-password/'
-      preLoaderRoute: typeof PublicAuthResetPasswordIndexRouteImport
+    '/_public/_auth/redefinir-senha/': {
+      id: '/_public/_auth/redefinir-senha/'
+      path: '/redefinir-senha'
+      fullPath: '/redefinir-senha/'
+      preLoaderRoute: typeof PublicAuthRedefinirSenhaIndexRouteImport
       parentRoute: typeof PublicAuthRoute
     }
     '/_public/_auth/login/': {
@@ -267,11 +267,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAuthLoginIndexRouteImport
       parentRoute: typeof PublicAuthRoute
     }
-    '/_public/_auth/forgot-password/': {
-      id: '/_public/_auth/forgot-password/'
-      path: '/forgot-password'
-      fullPath: '/forgot-password/'
-      preLoaderRoute: typeof PublicAuthForgotPasswordIndexRouteImport
+    '/_public/_auth/esqueci-senha/': {
+      id: '/_public/_auth/esqueci-senha/'
+      path: '/esqueci-senha'
+      fullPath: '/esqueci-senha/'
+      preLoaderRoute: typeof PublicAuthEsqueciSenhaIndexRouteImport
       parentRoute: typeof PublicAuthRoute
     }
   }
@@ -304,15 +304,15 @@ const PrivateRouteWithChildren =
   PrivateRoute._addFileChildren(PrivateRouteChildren)
 
 interface PublicAuthRouteChildren {
-  PublicAuthForgotPasswordIndexRoute: typeof PublicAuthForgotPasswordIndexRoute
+  PublicAuthEsqueciSenhaIndexRoute: typeof PublicAuthEsqueciSenhaIndexRoute
   PublicAuthLoginIndexRoute: typeof PublicAuthLoginIndexRoute
-  PublicAuthResetPasswordIndexRoute: typeof PublicAuthResetPasswordIndexRoute
+  PublicAuthRedefinirSenhaIndexRoute: typeof PublicAuthRedefinirSenhaIndexRoute
 }
 
 const PublicAuthRouteChildren: PublicAuthRouteChildren = {
-  PublicAuthForgotPasswordIndexRoute: PublicAuthForgotPasswordIndexRoute,
+  PublicAuthEsqueciSenhaIndexRoute: PublicAuthEsqueciSenhaIndexRoute,
   PublicAuthLoginIndexRoute: PublicAuthLoginIndexRoute,
-  PublicAuthResetPasswordIndexRoute: PublicAuthResetPasswordIndexRoute,
+  PublicAuthRedefinirSenhaIndexRoute: PublicAuthRedefinirSenhaIndexRoute,
 }
 
 const PublicAuthRouteWithChildren = PublicAuthRoute._addFileChildren(

@@ -13,12 +13,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+} from "@/ui/form";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/shadcn";
+} from "@/ui/select";
 
 interface ISelectOption {
   value: string;

@@ -1,4 +1,7 @@
 import {
+  Car,
+  FolderOpen,
+  Lightbulb,
   // BarChart3,
   // Calendar,
   // Car,
@@ -7,43 +10,74 @@ import {
   // LayoutDashboard,
   // Lightbulb,
   type LucideIcon,
-  // Package,
+  Package,
   // Settings,
   ShieldCheck,
+  UserCircle,
   // UserCircle,
   UserCog,
+  Users,
   // Users,
   // Wallet,
   // Wrench,
 } from "lucide-react";
 
-export interface NavItem {
+export interface INavItem {
   title: string;
   href: string;
   icon: LucideIcon;
   badge?: string;
+  permission?: string; // Permissão necessária para visualizar o item (ex: "client.index")
 }
 
-export interface NavSection {
+export interface INavSection {
   title: string;
-  items: NavItem[];
+  items: INavItem[];
 }
 
-export const navigationData: NavSection[] = [
-  // {
-  //   title: "Principal",
-  //   items: [
-  //     // { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  //     // { title: "Veículos", href: "/veiculos", icon: Car },
-  //     // { title: "Clientes", href: "/clientes", icon: Users },
-  //     // { title: "Fornecedores", href: "/suppliers", icon: Package },
-  //     // { title: "Clientes", href: "/customers", icon: Users },
-  //     // { title: "Motoristas", href: "/drivers", icon: UserCircle },
-  //     // { title: "Marcas e Modelos", href: "/marcas", icon: Car },
-  //     // { title: "Categorias de Veículos", href: "/categorias-veiculos", icon: FolderOpen },
-  //     // { title: "Reservas", href: "/reservas", icon: Calendar },
-  //   ],
-  // },
+export const navigationData: INavSection[] = [
+  {
+    title: "Principal",
+    items: [
+      // { title: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+      // { title: "Veículos", href: "/veiculos", icon: Car },
+      {
+        title: "Clientes",
+        href: "/clientes",
+        icon: Users,
+        permission: "client.index",
+      },
+      {
+        title: "Fornecedores",
+        href: "/fornecedores",
+        icon: Package,
+        permission: "supplier.index",
+      },
+      // { title: "Clientes", href: "/customers", icon: Users },
+      {
+        title: "Motoristas",
+        href: "/motoristas",
+        icon: UserCircle,
+        permission: "driver.index",
+      },
+      // { title: "Marcas e Modelos", href: "/marcas", icon: Car },
+      // { title: "Categorias de Veículos", href: "/categorias-veiculos", icon: FolderOpen },
+      // { title: "Motoristas", href: "/drivers", icon: UserCircle },
+      {
+        title: "Marcas e Modelos",
+        href: "/marcas",
+        icon: Car,
+        permission: "brand_models.index",
+      },
+      {
+        title: "Categorias de Veículos",
+        href: "/categorias-veiculos",
+        icon: FolderOpen,
+        permission: "vehicle_category.index",
+      },
+      // { title: "Reservas", href: "/reservas", icon: Calendar },
+    ],
+  },
   // {
   //   title: "Gestao",
   //   items: [
@@ -56,9 +90,24 @@ export const navigationData: NavSection[] = [
   {
     title: "Sistema",
     items: [
-      // { title: "Insights", href: "/insights", icon: Lightbulb },
-      { title: "Niveis de Acesso", href: "/nivel-acesso", icon: ShieldCheck },
-      { title: "Usuarios", href: "/usuarios", icon: UserCog },
+      {
+        title: "Insights",
+        href: "/insight",
+        icon: Lightbulb,
+        permission: "insight.index",
+      },
+      {
+        title: "Niveis de Acesso",
+        href: "/nivel-acesso",
+        icon: ShieldCheck,
+        permission: "access_profile.index",
+      },
+      {
+        title: "Usuarios",
+        href: "/usuarios",
+        icon: UserCog,
+        permission: "user.index",
+      },
       // { title: "Configuracoes", href: "/configuracoes", icon: Settings },
     ],
   },

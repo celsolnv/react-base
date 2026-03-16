@@ -4,7 +4,8 @@ import { Lock } from "lucide-react";
 
 import { PageBottomNav } from "@/components/layouts/bottom-nav/page-bottom-nav";
 import { useBottomNav } from "@/components/layouts/bottom-nav/use-bottom-nav";
-import { HeaderList } from "@/components/shared";
+import { HeaderList } from "@/components/shared/header-list";
+import { useFormDebug } from "@/hooks/use-form-debug";
 import { cn } from "@/lib/utils";
 
 import { UserForm } from "../components/user-form";
@@ -15,6 +16,7 @@ export default function CreateUserPage() {
 
   const { isActive: isBottomNavActive } = useBottomNav();
 
+  useFormDebug(form);
   return (
     <div className="flex h-full flex-col overflow-auto">
       <HeaderList

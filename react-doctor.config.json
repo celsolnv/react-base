@@ -1,0 +1,9 @@
+{
+  "ignore": {
+    "files": [
+      "src/modules/template-base/**",
+      "**/*.test.tsx"
+    ],
+    "rules": []
+  }
+}

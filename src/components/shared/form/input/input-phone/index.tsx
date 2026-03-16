@@ -7,9 +7,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
-} from "@/components/shadcn";
-import masks from "@/utils/masks";
+} from "@/ui/form";
+import { PhoneInput } from "@/ui/phone-input";
 
 interface IInputPhoneProps {
   name?: string;
@@ -44,15 +43,7 @@ export const InputPhone = ({
     <FormField
       control={form.control}
       name={name}
-      render={({ field: { onChange, value, ...restField } }) => {
-        // const value = masks.phone(field.value || "");
-        // Lógica de Máscara no onChange para garantir consistência
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-          const rawValue = e.target.value;
-          const maskedValue = masks.phone(rawValue);
-          onChange(maskedValue);
-        };
-
+      render={({ field: { value, ...restField } }) => {
         return (
           <FormItem className={className}>
             {label && (
@@ -62,14 +53,16 @@ export const InputPhone = ({
               </FormLabel>
             )}
             <FormControl>
-              <Input
+              <PhoneInput
                 {...restField}
                 value={value}
-                onChange={handleChange}
+                defaultCountry="BR"
+                // onChange={handleChange}
                 loading={isSubmitting}
                 min={min}
                 type={type}
                 placeholder={placeholder}
+                limitMaxLength={true}
                 disabled={disabled}
                 className={classNameInput}
                 autoComplete={autoComplete}

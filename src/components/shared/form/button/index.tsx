@@ -1,9 +1,9 @@
 import { type Control, type FieldValues, useFormState } from "react-hook-form";
 
-import type { ButtonProps } from "@/components/shadcn";
-import { Button } from "@/components/shadcn";
+import type { IButtonProps } from "@/ui/button";
+import { Button } from "@/ui/button";
 
-interface IButtonForm<T extends FieldValues> extends ButtonProps {
+interface IButtonForm<T extends FieldValues> extends IButtonProps {
   control: Control<T>;
 }
 export const ButtonForm = <T extends FieldValues>({

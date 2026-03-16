@@ -5,8 +5,8 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { describe, expect, it } from "vitest";
 
-import { buildColumns } from "../index";
 import type { BadgeMapping } from "./types";
+import { buildColumns } from ".";
 
 // Mock de tipos para teste
 interface TestUser {

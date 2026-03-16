@@ -16,7 +16,7 @@ import * as z from "zod";
 
 import { Form } from "@/components/ui/form";
 
-import { InputForm } from "./index";
+import { InputForm } from "../input-form/index";
 
 // Mock do useFormContext para controlar formState
 const mockUseFormContext = vi.fn();

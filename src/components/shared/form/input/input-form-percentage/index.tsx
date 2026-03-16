@@ -12,8 +12,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
-} from "@/components/shadcn";
+} from "@/ui/form";
+import { Input } from "@/ui/input";
 import Mask from "@/utils/masks";
 
 interface IInputFormPercentageProps<T extends FieldValues> {

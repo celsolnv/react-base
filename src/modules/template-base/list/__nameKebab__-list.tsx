@@ -1,11 +1,9 @@
 import { ShieldPlus } from "lucide-react";
 
-import {
-  DataTable,
-  DataTablePagination,
-  HeaderList,
-  InputSearch,
-} from "@/components/shared";
+import { DataTable } from "@/components/shared/data-table/data-table";
+import { DataTablePagination } from "@/components/shared/data-table/data-table-pagination";
+import { HeaderList } from "@/components/shared/header-list";
+import { InputSearch } from "@/components/shared/inputs/input-search";
 import { SelectStatus } from "@/components/shared/select/select-status";
 
 import { use__namePascal__List } from "./use-__nameKebab__-list";
@@ -15,14 +13,13 @@ export default function __namePascal__ListPage() {
     use__namePascal__List();
   return (
     <div className="flex h-full flex-col">
-      <div className="space-y-6">
         {/* Header - Fixo */}
         <HeaderList
           title="{{labelPt}}"
           description="Gerencie os {{labelPt}}"
           buttonText="Novo {{labelPt}}"
           buttonIcon={<ShieldPlus className="mr-2 h-4 w-4" />}
-          buttonLink="/__nameKebab__/criar"
+          buttonLink="/{{labelPt}}/criar"
         />
         <div className="border-border bg-card shadow-card flex h-full flex-col overflow-hidden rounded-lg border">
           {/* Filtros e Busca */}
@@ -45,8 +42,7 @@ export default function __namePascal__ListPage() {
           <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto">
             <DataTable table={table} columns={columns} isLoading={false} />
             <DataTablePagination table={table} totalCount={totalCount} />
-          </div>
-        </div>
+            </div>
       </div>
     </div>
   );

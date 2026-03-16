@@ -12,8 +12,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  Input,
-} from "@/components/shadcn";
+} from "@/ui/form";
+import { Input } from "@/ui/input";
 
 interface IControlledInputProps<T extends FieldValues> {
   control?: Control<T>; // Legacy prop for backward compatibility
@@ -57,6 +57,13 @@ export const InputForm = <T extends FieldValues>({
           const maskedValue = mask ? mask(rawValue) : rawValue;
           onChange(maskedValue);
         };
+
+        // Aplica máscara no valor inicial se uma máscara for fornecida
+        // Chama a máscara mesmo com null/undefined para manter consistência
+        const displayValue = mask
+          ? mask(value != null ? String(value) : "")
+          : (value ?? "");
+
         return (
           <FormItem className={className}>
             {label && (
@@ -69,7 +76,7 @@ export const InputForm = <T extends FieldValues>({
               <Input
                 {...restField}
                 onChange={handleChange}
-                value={value}
+                value={displayValue}
                 loading={isSubmitting}
                 min={min}
                 type={type}
@@ -77,6 +84,7 @@ export const InputForm = <T extends FieldValues>({
                 disabled={disabled}
                 className={classNameInput}
                 autoComplete={autoComplete}
+                {...(type === "date" && { max: "9999-12-31" })}
               />
             </FormControl>
             {/* Espaço reservado para evitar layout shift */}

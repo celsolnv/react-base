@@ -60,6 +60,29 @@ const TestForm = ({
   );
 };
 
+const TestChild = () => {
+  const formContext = useFormContext();
+  return <div>{formContext.watch("test")}</div>;
+};
+
+const TestFieldInfo = () => {
+  const field = useFormField();
+  return (
+    <div data-testid="field-info">
+      {field.name}-{field.id}
+    </div>
+  );
+};
+
+const TestFieldIds = () => {
+  const field = useFormField();
+  return (
+    <div data-testid="field-ids">
+      {field.formItemId}-{field.formDescriptionId}-{field.formMessageId}
+    </div>
+  );
+};
+
 describe("Form Components", () => {
   describe("Form", () => {
     it("should render FormProvider correctly", () => {
@@ -83,11 +106,6 @@ describe("Form Components", () => {
             test: "value",
           },
         });
-
-        const TestChild = () => {
-          const formContext = useFormContext();
-          return <div>{formContext.watch("test")}</div>;
-        };
 
         return (
           <Form {...form}>
@@ -819,15 +837,6 @@ describe("Form Components", () => {
           },
         });
 
-        const TestFieldInfo = () => {
-          const field = useFormField();
-          return (
-            <div data-testid="field-info">
-              {field.name}-{field.id}
-            </div>
-          );
-        };
-
         return (
           <Form {...form}>
             <FormField
@@ -855,15 +864,6 @@ describe("Form Components", () => {
             testField: "",
           },
         });
-
-        const TestFieldIds = () => {
-          const field = useFormField();
-          return (
-            <div data-testid="field-ids">
-              {field.formItemId}-{field.formDescriptionId}-{field.formMessageId}
-            </div>
-          );
-        };
 
         return (
           <Form {...form}>

@@ -1,13 +1,34 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import type { VariantProps } from "class-variance-authority";
 import type { LucideIcon } from "lucide-react";
 
 import type { badgeVariants } from "@/components/ui/badge/variants";
+import type { TPermission } from "@/types/IPermission";
+
+/**
+ * Tipo utilitário para gerar paths aninhados de um objeto
+ * Exemplo: Path<IUser> = "id" | "email" | "user.name" | "user.email" | "job_role.name"
+ */
+type Path<T> = T extends object
+  ? {
+      [K in keyof T]: K extends string | number
+        ? T[K] extends object
+          ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            T[K] extends any[]
+            ? K | `${K}.${Path<T[K][number]>}`
+            : T[K] extends Date | RegExp | Function
+              ? K
+              : K | `${K}.${Path<T[K]>}`
+          : K
+        : never;
+    }[keyof T]
+  : never;
 
 /**
  * Tipo base para todas as configurações de coluna
  */
 interface BaseColumnConfig<TData> {
-  accessorKey: keyof TData;
+  accessorKey: Path<TData> | keyof TData;
   header: string;
   className?: string;
   width?: string;
@@ -99,4 +120,5 @@ export interface TableAction<TData> {
   variant?: "default" | "destructive";
   hasSeparatorBefore?: boolean;
   hidden?: (row: TData) => boolean;
+  permission?: TPermission; // Permissão necessária para ver a ação (ex: "client:delete")
 }

@@ -1,15 +1,39 @@
 import { useFormContext } from "react-hook-form";
 
+import { getRouteApi } from "@tanstack/react-router";
 import { User } from "lucide-react";
 
-import { CardForm, InputForm, SelectForm } from "@/components/shared";
+import { CardForm } from "@/components/shared/form/card/card-form";
+import { InputForm } from "@/components/shared/form/input/input-form";
+import { InputPhone } from "@/components/shared/form/input/input-phone";
 import { ProfilePhotoForm } from "@/components/shared/form/profile-photo";
+import { SelectForm } from "@/components/shared/form/select/select-form";
 import masks from "@/utils/masks";
 
 import { documentTypeOptions } from "../../constants/options";
+import { useDeleteProfilePicture } from "../../http/mutations/use-delete-profile-picture";
+
+const routeApi = getRouteApi("/_private/usuarios/$user_id");
 
 export function BasicForm() {
   const form = useFormContext();
+  const deleteProfilePictureMutation = useDeleteProfilePicture();
+
+  // Tenta pegar o user_id da rota (apenas em modo update)
+  let userId: string | undefined;
+  try {
+    const loaderData = routeApi.useLoaderData();
+    userId = loaderData.user?.id;
+  } catch {
+    // Não está na rota de update, userId fica undefined
+    userId = undefined;
+  }
+
+  const handleDeleteExistingFile = async () => {
+    if (!userId) return;
+    await deleteProfilePictureMutation.mutateAsync(userId);
+  };
+
   return (
     <CardForm
       icon={<User className="text-foreground/80 h-5 w-5" />}
@@ -21,6 +45,7 @@ export function BasicForm() {
         label="Foto de perfil"
         initials={form.getValues("name")?.charAt(0) || "U"}
         className="col-span-12 sm:col-span-12"
+        onDeleteExistingFile={userId ? handleDeleteExistingFile : undefined}
       />
       <InputForm
         control={form.control}
@@ -43,10 +68,12 @@ export function BasicForm() {
         name="document"
         placeholder="Número do documento"
         className="col-span-12 sm:col-span-8"
-        mask={masks.cpf_cnpj}
+        mask={form.watch("document_type") === "CPF" ? masks.cpf : masks.cnpj}
+        disabled={!form.watch("document_type")}
         required
       />
       <InputForm
+        control={form.control}
         label="Data de nascimento"
         name="birth_date"
         type="date"
@@ -54,11 +81,9 @@ export function BasicForm() {
         required
         className="col-span-12 sm:col-span-6"
       />
-      <InputForm
+      <InputPhone
         label="Telefone"
         name="phone"
-        type="tel"
-        mask={masks.phone}
         placeholder="Telefone"
         required
         className="col-span-12 sm:col-span-6"
